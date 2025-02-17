@@ -1,16 +1,12 @@
 import { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { Items } from "../type/item";
+import { boards } from "../type/item";
+import { DndHelpers } from "../type/dndHelpers";
+import React from "react";
 
-interface DndHelpers {
-    isMoveBoard: (id: string) => boolean;
-    findBoard: (id: string) => number;
-    getBoardItems: (index: number) => { id: string; name: string }[];
-}
-
-export const useDndHandlers = (
-    items: Items,
-    setItems: React.Dispatch<React.SetStateAction<Items>>,
+const useDndHandlers = (
+    items: boards,
+    setItems: React.Dispatch<React.SetStateAction<boards>>,
     setActiveId: (id: string | null) => void,
     helpers: DndHelpers
 ) => {
@@ -25,7 +21,7 @@ export const useDndHandlers = (
         const overItemId = over.id as string;
 
         // 보드 이동
-        if (helpers.isMoveBoard(activeItemId)) {
+        if (helpers.isSomeBoard(activeItemId)) {
             const oldIndex = items.findIndex((c) => c.title === activeItemId);
             const newIndex = items.findIndex((c) => c.title === overItemId);
             setItems(arrayMove(items, oldIndex, newIndex));
@@ -33,14 +29,14 @@ export const useDndHandlers = (
         }
 
         // 같은 보드 내 아이템 이동
-        const activeBoardIdx = helpers.findBoard(activeItemId);
-        const overBoardIdx = helpers.findBoard(overItemId);
+        const activeBoardIdx = helpers.findBoardIdx(activeItemId);
+        const overBoardIdx = helpers.findBoardIdx(overItemId);
         if (activeBoardIdx === overBoardIdx && activeBoardIdx !== -1) {
             const boardItems = helpers.getBoardItems(activeBoardIdx);
             const oldIndex = boardItems.findIndex((item) => item.id === activeItemId);
             const newIndex = boardItems.findIndex((item) => item.id === overItemId);
 
-            setItems((prev: Items) => {
+            setItems((prev: boards) => {
                 const newItems = [...prev];
                 newItems[activeBoardIdx].items = arrayMove(boardItems, oldIndex, newIndex);
                 return newItems;
@@ -53,23 +49,26 @@ export const useDndHandlers = (
     const handleDragOver = ({ active, over }: DragOverEvent) => {
         if (!over) return;
 
-        const activeBoard = helpers.findBoard(active.id as string);
-        const isOverBoard = helpers.isMoveBoard(over.id as string);
-        const overBoard = isOverBoard
-            ? items.findIndex((c) => c.title === over.id)
-            : helpers.findBoard(over.id as string);
+        const activeBoardIdx = helpers.findBoardIdx(active.id as string);
+        //오버된 아이템이 보드인지 확인
+        const isOverBoard = helpers.isSomeBoard(over.id as string);
 
-        if (activeBoard === -1 || overBoard === -1 || activeBoard === overBoard) return;
+        //만약 오버된 요소가 보드가 아니라면 아이템 Index를 반환 보드가 맞다면 보드 Index를 반환
+        const overBoardIdx = isOverBoard
+            ? items.findIndex((el) => el.title === over.id)
+            : helpers.findBoardIdx(over.id as string);
 
-        setItems((prev: Items) => {
+        if (activeBoardIdx === -1 || overBoardIdx === -1 || activeBoardIdx === overBoardIdx) return;
+
+        setItems((prev: boards) => {
             const newItems = [...prev];
-            const activeItem = prev[activeBoard].items.find((item) => item.id === active.id);
+            const activeItem = prev[activeBoardIdx].items.find((item) => item.id === active.id);
             if (!activeItem) return prev;
 
-            newItems[activeBoard].items = prev[activeBoard].items.filter((item) => item.id !== active.id);
+            newItems[activeBoardIdx].items = prev[activeBoardIdx].items.filter((item) => item.id !== active.id);
 
-            const overItems = newItems[overBoard].items;
-            newItems[overBoard].items = isOverBoard
+            const overItems = newItems[overBoardIdx].items;
+            newItems[overBoardIdx].items = isOverBoard
                 ? [...overItems, activeItem]
                 : overItems.length === 0
                 ? [activeItem]
@@ -92,3 +91,5 @@ export const useDndHandlers = (
         handleDragOver,
     };
 };
+
+export default useDndHandlers;

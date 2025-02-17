@@ -1,36 +1,28 @@
 "use client";
 
+import useBoardHandler from "@/app/hooks/useBoardHandler";
+
+import useDndHandlers from "@/app/hooks/useDndHandlers";
+import useItemHandler from "@/app/hooks/useItemHandler";
+import { helpers } from "@/app/lib/helpers";
+import { boards } from "@/app/type/item";
 import {
     DndContext,
-    DragEndEvent,
-    DragOverEvent,
     DragOverlay,
-    DragStartEvent,
     KeyboardSensor,
     PointerSensor,
     closestCorners,
     useSensor,
     useSensors,
 } from "@dnd-kit/core";
-import {
-    SortableContext,
-    arrayMove,
-    horizontalListSortingStrategy,
-    sortableKeyboardCoordinates,
-} from "@dnd-kit/sortable";
+import { SortableContext, horizontalListSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useState } from "react";
 import { Board } from "./Board";
 import { SortableItem } from "./SortableItem";
-import { Items } from "@/app/type/item";
-import { helpers } from "@/app/lib/helpers";
-import { useDndHandlers } from "@/app/hooks/useDndHandlers";
-import { generateId } from "@/app/lib/generateId";
-import useItemHandler from "@/app/hooks/useItemHandler";
-import useBoardHandler from "@/app/hooks/useBoardHandler";
 
 export default function DndBoard() {
-    const [items, setItems] = useLocalStorage<Items>("items", [
+    const [boards, setBoards] = useLocalStorage<boards>("boards", [
         {
             title: "board1",
             items: [
@@ -50,10 +42,10 @@ export default function DndBoard() {
     const [activeId, setActiveId] = useState<string | null>(null);
     const [newBoard, setNewBoard] = useState("");
 
-    const helper = helpers(items);
-    const handlers = useDndHandlers(items, setItems, setActiveId, helper);
-    const { handleAddItem, handleEditItem, handleDeleteItem } = useItemHandler(setItems);
-    const { handleAddBoard, handleEditBoard, handleDeleteBoard } = useBoardHandler(setItems);
+    const helper = helpers(boards);
+    const { handleDragStart, handleDragEnd, handleDragOver } = useDndHandlers(boards, setBoards, setActiveId, helper);
+    const { handleAddItem, handleEditItem, handleDeleteItem } = useItemHandler(setBoards);
+    const { handleAddBoard, handleEditBoard, handleDeleteBoard } = useBoardHandler(setBoards);
     // 센서 설정
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -67,13 +59,13 @@ export default function DndBoard() {
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCorners}
-                onDragStart={handlers.handleDragStart}
-                onDragOver={handlers.handleDragOver}
-                onDragEnd={handlers.handleDragEnd}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
+                onDragEnd={handleDragEnd}
             >
-                <SortableContext items={items.map((board) => board.title)} strategy={horizontalListSortingStrategy}>
-                    <div className="flex gap-4 flex-wrap">
-                        {items.map((board) => (
+                <SortableContext items={boards.map((board) => board.title)} strategy={horizontalListSortingStrategy}>
+                    <div className="flex flex-wrap gap-4">
+                        {boards.map((board) => (
                             <Board
                                 key={board.title}
                                 id={board.title}
@@ -91,6 +83,10 @@ export default function DndBoard() {
                             <form
                                 onSubmit={(e) => {
                                     e.preventDefault();
+                                    if (boards.some((board) => board.title === newBoard)) {
+                                        alert("이미 존재하는 보드입니다.");
+                                        return;
+                                    }
                                     if (!newBoard.trim()) return; // 빈 문자열 체크
                                     handleAddBoard(newBoard);
                                     setNewBoard("");
@@ -107,7 +103,7 @@ export default function DndBoard() {
                                 <button
                                     type="submit"
                                     disabled={!newBoard.trim()}
-                                    className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="w-full px-4 py-2 text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Add board
                                 </button>
@@ -119,16 +115,16 @@ export default function DndBoard() {
                 {/* dnd 오버레이(dnd 애니메이션 효과) */}
                 <DragOverlay>
                     {activeId &&
-                        (helper.isMoveBoard(activeId) ? (
+                        (helper.isSomeBoard(activeId) ? (
                             <Board
                                 id={activeId}
-                                items={items.find((c) => c.title === activeId)?.items || []}
+                                items={boards.find((c) => c.title === activeId)?.items || []}
                                 isDragOverlay
                             />
                         ) : (
                             <SortableItem
                                 id={activeId}
-                                name={items.flatMap((c) => c.items).find((item) => item.id === activeId)?.name || ""}
+                                name={boards.flatMap((c) => c.items).find((item) => item.id === activeId)?.name || ""}
                                 isDragOverlay
                             />
                         ))}

@@ -125,7 +125,7 @@ export function Board({
                     type="text"
                     value={addValue}
                     onChange={(e) => setAddValue(e.target.value)}
-                    placeholder="새 아이템 추가"
+                    placeholder="할일 추가"
                     className="flex-1 pl-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md"
                 />
                 <button

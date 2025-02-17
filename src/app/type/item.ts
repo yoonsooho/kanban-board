@@ -3,7 +3,7 @@ export type Item = {
     name: string;
 };
 
-export type Items = {
+export type boards = {
     title: string;
     items: Item[];
 }[];

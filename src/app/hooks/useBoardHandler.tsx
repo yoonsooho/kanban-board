@@ -1,7 +1,7 @@
-import { Items } from "@/app/type/item";
+import { boards } from "@/app/type/item";
 import React from "react";
 
-const useBoardHandler = (setItems: React.Dispatch<React.SetStateAction<Items>>) => {
+const useBoardHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) => {
     // 새 보드 추가
     const handleAddBoard = (boardName: string) => {
         setItems((prev) => [...prev, { title: boardName, items: [] }]);

@@ -1,8 +1,8 @@
 import { generateId } from "@/app/lib/generateId";
-import { Items } from "@/app/type/item";
+import { boards } from "@/app/type/item";
 import React from "react";
 
-const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<Items>>) => {
+const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) => {
     // 새 아이템 추가
     const handleAddItem = (boardName: string, itemName: string) => {
         if (itemName.trim() === "") return;
