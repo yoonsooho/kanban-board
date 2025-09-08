@@ -41,7 +41,6 @@ export default function DndBoard() {
 
     const [activeId, setActiveId] = useState<string | null>(null);
     const [newBoard, setNewBoard] = useState("");
-
     const helper = helpers(boards);
     const { handleDragStart, handleDragEnd, handleDragOver } = useDndHandlers(boards, setBoards, setActiveId, helper);
     const { handleAddItem, handleEditItem, handleDeleteItem } = useItemHandler(setBoards);
@@ -63,7 +62,7 @@ export default function DndBoard() {
                 onDragOver={handleDragOver}
                 onDragEnd={handleDragEnd}
             >
-                <SortableContext items={boards.map((board) => board.title)} strategy={horizontalListSortingStrategy}>
+                <SortableContext items={boards.map((board) => board.title)}>
                     <div className="flex flex-wrap gap-4">
                         {boards.map((board) => (
                             <Board
