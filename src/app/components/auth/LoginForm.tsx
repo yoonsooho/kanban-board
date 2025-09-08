@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetUser, useSignIn, useSignOut } from "@/app/hooks/useAuth";
-import { signOut } from "@/app/api/authApi";
 
 const loginSchema = z.object({
     userId: z.string().min(1, "사용자 ID를 입력해주세요"),

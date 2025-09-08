@@ -9,6 +9,11 @@ export const signIn = async (data: any) => {
         credentials: "include",
         body: JSON.stringify(data),
     });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "로그인 실패"); // <- 여기서 throw
+    }
     const result = await response.json();
 
     // 쿠키는 서버에서 자동으로 설정됨
@@ -24,6 +29,10 @@ export const signUp = async (data: any) => {
         credentials: "include",
         body: JSON.stringify(data),
     });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "회원가입 실패"); // <- 여기서 throw
+    }
     return response.json();
 };
 
