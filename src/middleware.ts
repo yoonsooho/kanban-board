@@ -31,28 +31,19 @@ export async function middleware(request: NextRequest) {
 
     try {
         // refresh 토큰으로 새로운 access_token 요청
-        const refreshResponse = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/auth/refresh`,
-            {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${refreshToken}`,
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        const refreshResponse = await fetch(`/api/auth/refresh`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+                "Content-Type": "application/json",
+            },
+        });
 
         if (refreshResponse.ok) {
-            // 새로운 쿠키를 응답에 포함
-            const response = NextResponse.next();
+            console.log("토큰 갱신 성공");
 
-            // refresh API에서 받은 모든 Set-Cookie 헤더를 복사
-            const cookies = refreshResponse.headers.getSetCookie();
-            cookies.forEach((cookie) => {
-                response.headers.append("Set-Cookie", cookie);
-            });
-
-            return response;
+            // 서버에서 이미 Set-Cookie 헤더를 설정하므로 별도 처리 불필요
+            return NextResponse.next();
         } else {
             // refresh 실패 시 로그인 페이지로 리다이렉트
             return NextResponse.redirect(new URL("/", request.url));
