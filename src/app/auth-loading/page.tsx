@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // 동적 렌더링 강제 설정 (빌드 에러 방지)
 export const dynamic = "force-dynamic";
 
-export default function AuthLoadingPage() {
+function AuthLoadingContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const redirectUrl = searchParams.get("redirect") || "/main";
@@ -44,5 +44,22 @@ export default function AuthLoadingPage() {
                 <p className="text-gray-500">잠시만 기다려주세요. 로그인 정보를 확인하고 있습니다.</p>
             </div>
         </div>
+    );
+}
+
+export default function AuthLoadingPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <h2 className="text-xl font-semibold text-gray-700 mb-2">로딩 중...</h2>
+                    </div>
+                </div>
+            }
+        >
+            <AuthLoadingContent />
+        </Suspense>
     );
 }
