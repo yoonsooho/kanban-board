@@ -85,12 +85,8 @@ export default function Header() {
                         {user && (
                             <div className="flex items-center space-x-3">
                                 <div className="flex flex-col text-right">
-                                    <span className="text-sm font-medium text-gray-900">{user.name || user.email}</span>
-                                    <span className="text-xs text-gray-500">{user.email}</span>
-                                </div>
-                                <div className="h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                    <span className="text-white text-sm font-medium">
-                                        {(user.name || user.email)?.charAt(0).toUpperCase()}
+                                    <span className="text-sm font-medium text-gray-900">
+                                        안녕하세요, {user.username} 님!
                                     </span>
                                 </div>
                             </div>
