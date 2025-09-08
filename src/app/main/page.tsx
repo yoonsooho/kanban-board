@@ -1,6 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import React from "react";
+import Header from "@/app/components/Header";
 
 const DndBoard = dynamic(() => import("@/app/components/DndBoard"), {
     ssr: false,
@@ -9,8 +10,11 @@ const DndBoard = dynamic(() => import("@/app/components/DndBoard"), {
 
 const Main = () => {
     return (
-        <div>
-            <DndBoard />
+        <div className="min-h-screen bg-gray-50">
+            <Header />
+            <main className="py-6">
+                <DndBoard />
+            </main>
         </div>
     );
 };
