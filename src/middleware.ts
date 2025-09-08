@@ -94,7 +94,7 @@ export async function middleware(request: NextRequest) {
             // Access Token 쿠키 설정 (15분)
             if (newAccessToken) {
                 const cookieOptions = {
-                    maxAge: 15 * 60, // 15분 (초 단위)
+                    maxAge: 1 * 60, // 15분 (초 단위)
                     secure: isProduction && isHttps, // HTTPS에서만 secure
                     sameSite: isProduction && isHttps ? "none" : "lax",
                     path: "/",
