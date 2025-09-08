@@ -1,7 +1,7 @@
 import { getAccessTokenFromCookie } from "@/lib/utils";
 
 export const signIn = async (data: any) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/auth/signin`, {
+    const response = await fetch(`/api/auth/signin`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export const signIn = async (data: any) => {
 };
 
 export const signUp = async (data: any) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/auth/signup`, {
+    const response = await fetch(`/api/auth/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const getUser = async () => {
         headers.Authorization = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/users/me`, {
+    const response = await fetch(`/api/users/me`, {
         method: "GET",
         headers,
         credentials: "include",
@@ -72,7 +72,7 @@ export const signOut = async () => {
         headers.Authorization = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/auth/signout`, {
+    const response = await fetch(`/api/auth/signout`, {
         method: "POST",
         headers,
         credentials: "include",
