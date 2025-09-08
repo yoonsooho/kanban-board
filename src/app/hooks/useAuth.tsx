@@ -8,7 +8,6 @@ export const useSignIn = () => {
     return useMutation({
         mutationFn: (data: any) => signIn(data),
         onSuccess: (data) => {
-            console.log(data);
             router.push("/main");
         },
         onError: (error) => {

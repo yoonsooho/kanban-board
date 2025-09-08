@@ -58,7 +58,7 @@ export async function middleware(request: NextRequest) {
             // Access Token 쿠키 설정 (15분)
             if (newAccessToken) {
                 response.cookies.set("access_token", newAccessToken, {
-                    maxAge: 15 * 60, // 15분 (초 단위)
+                    maxAge: 3, // 15분 (초 단위)
                     secure: process.env.NODE_ENV === "production",
                     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
                     path: "/",
