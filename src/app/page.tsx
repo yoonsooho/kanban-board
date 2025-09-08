@@ -71,7 +71,7 @@ export default function Home() {
                 <div className="mx-auto max-w-7xl">
                     <div className="mx-auto max-w-2xl text-center">
                         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                            왜 TaskFlow를 선택해야 할까요?
+                            왜 GoalDiary를 선택해야 할까요?
                         </h2>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
                             현대적인 팀을 위한 가장 직관적이고 효율적인 작업 관리 도구입니다.
@@ -126,7 +126,7 @@ export default function Home() {
             <section className="px-4 py-16 sm:px-6 lg:px-8 bg-blue-600">
                 <div className="mx-auto max-w-7xl text-center">
                     <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                        지금 바로 TaskFlow를 시작해보세요
+                        지금 바로 GoalDiary를 시작해보세요
                     </h2>
                     <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-blue-100">
                         회원가입은 1분이면 완료됩니다. 신용카드 정보도 필요하지 않습니다.

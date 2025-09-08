@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "GoalDiary - 목표와 일기를 함께하는 스마트 작업관리",
         description: "개인의 목표, 명언, 일기와 팀 협업을 하나로 통합한 혁신적인 플랫폼",
-        url: "https://goaldiary.app",
+        url: "https://goaldiary.vercel.app/",
         siteName: "GoalDiary",
         locale: "ko_KR",
         type: "website",
