@@ -3,6 +3,9 @@
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+// 동적 렌더링 강제 설정 (빌드 에러 방지)
+export const dynamic = "force-dynamic";
+
 export default function AuthLoadingPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
