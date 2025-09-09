@@ -17,10 +17,12 @@ export const useSignIn = () => {
                 try {
                     console.log("로그인 성공 후 페이지 이동");
                     // Next.js router가 불안정하므로 안정적인 방법 사용
-                    window.location.href = "/main";
+                    // window.location.href = "/main";
+                    router.push("/main");
                 } catch (error) {
                     console.error("페이지 이동 에러:", error);
-                    window.location.href = "/main";
+                    // window.location.href = "/main";
+                    router.push("/main");
                 }
             }, 100);
         },
