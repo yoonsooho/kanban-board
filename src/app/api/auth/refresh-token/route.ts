@@ -36,39 +36,16 @@ export async function POST(request: NextRequest) {
         }
 
         const responseData = await refreshResponse.json();
-        const newAccessToken = responseData.access_token;
-        const newRefreshToken = responseData.refresh_token;
+        console.log("토큰 갱신 성공 - 백엔드에서 쿠키 설정됨");
 
-        console.log("토큰 갱신 성공");
+        // 백엔드 응답의 쿠키를 브라우저로 전달
+        const response = NextResponse.json({ success: true, data: responseData });
 
-        // 응답 생성
-        const response = NextResponse.json({ success: true });
-
-        // 환경 정보 확인
-        const isProduction = process.env.NODE_ENV === "production";
-        const isHttps = request.nextUrl.protocol === "https:";
-
-        // Access Token 쿠키 설정 (15분)
-        if (newAccessToken) {
-            response.cookies.set("access_token", newAccessToken, {
-                maxAge: 15 * 60, // 15분 (초 단위)
-                secure: isProduction && isHttps,
-                sameSite: isProduction && isHttps ? "none" : "lax",
-                path: "/",
-            });
-            console.log("새로운 access_token 쿠키 설정됨");
-        }
-
-        // Refresh Token 쿠키 설정 (7일)
-        if (newRefreshToken) {
-            response.cookies.set("refresh_token", newRefreshToken, {
-                maxAge: 7 * 24 * 60 * 60, // 7일 (초 단위)
-                secure: isProduction && isHttps,
-                sameSite: isProduction && isHttps ? "none" : "lax",
-                httpOnly: true, // XSS 방지
-                path: "/",
-            });
-            console.log("새로운 refresh_token 쿠키 설정됨");
+        // 백엔드 응답의 Set-Cookie 헤더를 그대로 전달
+        const setCookieHeaders = refreshResponse.headers.get("set-cookie");
+        console.log("setCookieHeaders", setCookieHeaders);
+        if (setCookieHeaders) {
+            response.headers.set("Set-Cookie", setCookieHeaders);
         }
 
         return response;
