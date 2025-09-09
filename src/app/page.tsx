@@ -43,19 +43,6 @@ export default function Home() {
                                     <span className="text-gray-700">완전 무료 사용</span>
                                 </div>
                             </div>
-
-                            <div className="mt-10 flex items-center gap-x-6">
-                                <Link
-                                    href="/main"
-                                    className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 flex items-center gap-2"
-                                >
-                                    무료로 시작하기
-                                    <ArrowRight className="h-4 w-4" />
-                                </Link>
-                                <a href="#features" className="text-sm font-semibold leading-6 text-gray-900">
-                                    더 알아보기 <span aria-hidden="true">→</span>
-                                </a>
-                            </div>
                         </div>
 
                         {/* Right: Auth Component */}
@@ -133,14 +120,6 @@ export default function Home() {
                     <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-blue-100">
                         회원가입은 1분이면 완료됩니다. 신용카드 정보도 필요하지 않습니다.
                     </p>
-                    <div className="mt-10 flex items-center justify-center gap-x-6">
-                        <Link
-                            href="/main"
-                            className="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-blue-600 shadow-sm hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                        >
-                            무료로 시작하기
-                        </Link>
-                    </div>
                 </div>
             </section>
         </div>
