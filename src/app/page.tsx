@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowRight, CheckCircle, Users, Zap, Shield } from "lucide-react";
