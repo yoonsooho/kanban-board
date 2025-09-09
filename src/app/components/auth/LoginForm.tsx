@@ -23,11 +23,8 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
-    const { data: user } = useGetUser();
     const [error, setError] = useState<string>("");
-    const router = useRouter();
     const { mutateAsync, isPending } = useSignIn();
-    const { mutate: signOutMutation } = useSignOut();
 
     const {
         register,

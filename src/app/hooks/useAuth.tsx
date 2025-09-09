@@ -8,7 +8,10 @@ export const useSignIn = () => {
     return useMutation({
         mutationFn: (data: any) => signIn(data),
         onSuccess: (data) => {
-            router.push("/main");
+            // 쿠키 설정을 위한 약간의 대기
+            setTimeout(() => {
+                router.push("/main");
+            }, 100);
         },
         onError: (error) => {
             console.log(error);
