@@ -15,22 +15,11 @@ export const useSignIn = () => {
                 console.log("페이지 이동 시도 전");
                 console.log("router 객체:", router);
                 try {
-                    console.log("Next.js 15.1 테스트: router.push 사용");
-                    router.push("/main");
-                    console.log("router.push 실행 완료");
-
-                    // 5초 후에도 페이지 이동이 안 되면 fallback
-                    setTimeout(() => {
-                        console.log("5초 후 현재 경로 재확인:", window.location.pathname);
-                        if (window.location.pathname === "/") {
-                            console.log("router.push 실패, fallback으로 window.location.href 사용");
-                            window.location.href = "/main";
-                        } else {
-                            console.log("✅ router.push 성공! Next.js 15.1에서 정상 작동");
-                        }
-                    }, 5000);
+                    console.log("로그인 성공 후 페이지 이동");
+                    // Next.js router가 불안정하므로 안정적인 방법 사용
+                    window.location.href = "/main";
                 } catch (error) {
-                    console.error("router.push 에러:", error);
+                    console.error("페이지 이동 에러:", error);
                     window.location.href = "/main";
                 }
             }, 100);
