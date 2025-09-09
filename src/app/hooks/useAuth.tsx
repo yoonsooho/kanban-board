@@ -8,9 +8,18 @@ export const useSignIn = () => {
     return useMutation({
         mutationFn: (data: any) => signIn(data),
         onSuccess: (data) => {
+            console.log("로그인 성공:", data);
+            console.log("현재 경로:", window.location.pathname);
             // 쿠키 설정을 위한 약간의 대기
             setTimeout(() => {
-                router.push("/main");
+                console.log("페이지 이동 시도 전");
+                console.log("router 객체:", router);
+                try {
+                    router.push("/main");
+                    console.log("router.push 실행 완료");
+                } catch (error) {
+                    console.error("router.push 에러:", error);
+                }
             }, 100);
         },
         onError: (error) => {
