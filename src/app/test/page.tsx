@@ -10,14 +10,7 @@ const DndBoard = dynamic(() => import("@/app/components/DndBoard"), {
 });
 
 const Main = () => {
-    return (
-        <div className="min-h-screen bg-gray-50">
-            <Header />
-            <main className="py-6">
-                <DndBoard />
-            </main>
-        </div>
-    );
+    return <div className="min-h-screen bg-gray-50">test</div>;
 };
 
 export default Main;

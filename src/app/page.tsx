@@ -3,10 +3,11 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowRight, CheckCircle, Users, Zap, Shield } from "lucide-react";
+import { PageLoading } from "@/components/ui/loading";
 
 const AuthPage = dynamic(() => import("./components/auth/AuthPage"), {
     ssr: false,
-    loading: () => <div className="flex justify-center items-center h-screen">Loading...</div>,
+    loading: () => <PageLoading text="로그인 페이지를 로딩중입니다..." />,
 });
 
 export default function Home() {

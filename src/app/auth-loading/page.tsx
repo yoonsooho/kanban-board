@@ -2,6 +2,7 @@
 
 import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { PageLoading } from "@/components/ui/loading";
 
 // 동적 렌더링 강제 설정 (빌드 에러 방지)
 export const dynamic = "force-dynamic";
@@ -22,14 +23,15 @@ function AuthLoadingContent() {
 
                 if (response.ok) {
                     console.log("토큰 갱신 성공, 리다이렉트:", redirectUrl);
-                    router.push(redirectUrl);
+                    // 히스토리에서 완전히 제거하기 위해 window.location.replace 사용
+                    window.location.replace(redirectUrl);
                 } else {
                     console.log("토큰 갱신 실패, 로그인 페이지로 이동");
-                    router.push("/");
+                    window.location.replace("/");
                 }
             } catch (error) {
                 console.error("토큰 갱신 중 에러:", error);
-                router.push("/");
+                window.location.replace("/");
             }
         };
 
@@ -49,16 +51,7 @@ function AuthLoadingContent() {
 
 export default function AuthLoadingPage() {
     return (
-        <Suspense
-            fallback={
-                <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                    <div className="text-center">
-                        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                        <h2 className="text-xl font-semibold text-gray-700 mb-2">로딩 중...</h2>
-                    </div>
-                </div>
-            }
-        >
+        <Suspense fallback={<PageLoading text="인증 정보를 확인중입니다..." />}>
             <AuthLoadingContent />
         </Suspense>
     );

@@ -72,7 +72,7 @@ export const signOut = async () => {
         headers.Authorization = `Bearer ${token}`;
     }
 
-    const response = await fetch(`/api/auth/signout`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/auth/signout`, {
         method: "POST",
         headers,
         credentials: "include",
