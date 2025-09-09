@@ -15,10 +15,20 @@ export const useSignIn = () => {
                 console.log("페이지 이동 시도 전");
                 console.log("router 객체:", router);
                 try {
-                    router.push("/main");
-                    console.log("router.push 실행 완료");
+                    console.log("배포 환경 감지, 직접 페이지 이동 시도");
+                    // 배포 환경에서는 바로 window.location.href 사용
+                    if (process.env.NODE_ENV === "production") {
+                        console.log("프로덕션 환경: window.location.href 사용");
+                        window.location.href = "/main";
+                    } else {
+                        console.log("개발 환경: router.push 사용");
+                        router.push("/main");
+                        console.log("router.push 실행 완료");
+                    }
                 } catch (error) {
-                    console.error("router.push 에러:", error);
+                    console.error("페이지 이동 에러:", error);
+                    // 에러 발생시 강제 이동
+                    window.location.href = "/main";
                 }
             }, 100);
         },
