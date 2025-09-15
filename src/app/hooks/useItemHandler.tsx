@@ -4,32 +4,35 @@ import React from "react";
 
 const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) => {
     // 새 아이템 추가
-    const handleAddItem = (boardName: string, itemName: string) => {
+    const handleAddItem = (boardId: number, itemName: string) => {
         if (itemName.trim() === "") return;
-        setItems((prev) => {
-            return prev.map((el) => {
-                if (el.title === boardName) {
-                    return { ...el, items: [...el.items, { id: generateId(), name: itemName }] };
-                }
-                return el;
-            });
-        });
+
+        // setItems((prev) => {
+        //     return prev.map((el) => {
+        //         if (el.id === boardId) {
+        //             return { ...el, contentItems: [...el.contentItems, { name: itemName }] };
+        //         }
+        //         return el;
+        //     });
+        // });
     };
 
     // 아이템 이름 수정
-    const handleEditItem = (itemId: string, newName: string) => {
+    const handleEditItem = (itemId: number, newName: string) => {
         setItems((prev) =>
             prev.map((board) => ({
                 ...board,
-                items: board.items.map((item) => (item.id === itemId ? { ...item, name: newName } : item)),
+                contentItems: board.contentItems.map((item) =>
+                    item.id === itemId ? { ...item, name: newName } : item
+                ),
             }))
         );
     };
 
     // 아이템 삭제
-    const handleDeleteItem = (itemId: string) => {
+    const handleDeleteItem = (itemId: number) => {
         setItems((prev) =>
-            prev.map((board) => ({ ...board, items: board.items.filter((item) => item.id !== itemId) }))
+            prev.map((board) => ({ ...board, contentItems: board.contentItems.filter((item) => item.id !== itemId) }))
         );
     };
 

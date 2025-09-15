@@ -16,36 +16,30 @@ import {
     useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, horizontalListSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { useLocalStorage } from "@uidotdev/usehooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Board } from "./Board";
 import { SortableItem } from "./SortableItem";
-import { useGetSchedules, usePostSchedules } from "@/app/hooks/useSchedules";
+import { useGetPosts } from "@/app/hooks/usePost";
+import { PageLoading } from "@/components/ui/loading";
+import { getPosts } from "@/lib/postApi";
+import { useQuery } from "@tanstack/react-query";
 
-export default function DndBoard() {
-    const [boards, setBoards] = useLocalStorage<boards>("boards", [
-        {
-            title: "board1",
-            items: [
-                { id: "1", name: "Item 1" },
-                { id: "2", name: "Item 2" },
-            ],
-        },
-        {
-            title: "board2",
-            items: [
-                { id: "3", name: "Item 3" },
-                { id: "4", name: "Item 4" },
-            ],
-        },
-    ]);
+export default function DndBoard({ scheduleId }: { scheduleId: number }) {
+    const { data: boardsData, isLoading } = useGetPosts(scheduleId);
+    const [boards, setBoards] = useState<boards>(boardsData || []);
 
-    const [activeId, setActiveId] = useState<string | null>(null);
+    const [activeId, setActiveId] = useState<number | null>(null);
     const [newBoard, setNewBoard] = useState("");
     const helper = helpers(boards);
-    const { handleDragStart, handleDragEnd, handleDragOver } = useDndHandlers(boards, setBoards, setActiveId, helper);
+    const { handleDragStart, handleDragEnd, handleDragOver } = useDndHandlers(
+        boards,
+        setBoards,
+        setActiveId,
+        helper,
+        scheduleId
+    );
     const { handleAddItem, handleEditItem, handleDeleteItem } = useItemHandler(setBoards);
-    const { handleAddBoard, handleEditBoard, handleDeleteBoard } = useBoardHandler(setBoards);
+    const { handleAddBoard, handleEditBoard, handleDeleteBoard } = useBoardHandler(setBoards, scheduleId);
     // 센서 설정
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -53,6 +47,11 @@ export default function DndBoard() {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
+    useEffect(() => {
+        if (boardsData) setBoards(boardsData);
+    }, [boardsData]);
+
+    if (isLoading) return <PageLoading />;
 
     return (
         <div className="p-8">
@@ -63,13 +62,14 @@ export default function DndBoard() {
                 onDragOver={handleDragOver}
                 onDragEnd={handleDragEnd}
             >
-                <SortableContext items={boards.map((board) => board.title)}>
+                <SortableContext items={boards.map((board) => board.id)}>
                     <div className="flex flex-wrap gap-4">
-                        {boards.map((board) => (
+                        {boards?.map((board) => (
                             <Board
-                                key={board.title}
-                                id={board.title}
-                                items={board.items}
+                                key={board.id}
+                                id={board.id}
+                                title={board.title}
+                                items={board.contentItems}
                                 handleEditBoard={handleEditBoard}
                                 handleDeleteBoard={handleDeleteBoard}
                                 handleAddBoard={handleAddBoard}
@@ -83,7 +83,7 @@ export default function DndBoard() {
                             <form
                                 onSubmit={(e) => {
                                     e.preventDefault();
-                                    if (boards.some((board) => board.title === newBoard)) {
+                                    if (boards.some((board) => board.id === Number(newBoard))) {
                                         alert("이미 존재하는 보드입니다.");
                                         return;
                                     }
@@ -117,14 +117,19 @@ export default function DndBoard() {
                     {activeId &&
                         (helper.isSomeBoard(activeId) ? (
                             <Board
-                                id={activeId}
-                                items={boards.find((c) => c.title === activeId)?.items || []}
+                                id={Number(activeId)}
+                                title={activeId.toString()}
+                                items={boards.find((c) => c.id === activeId)?.contentItems || []}
                                 isDragOverlay
                             />
                         ) : (
                             <SortableItem
-                                id={activeId}
-                                name={boards.flatMap((c) => c.items).find((item) => item.id === activeId)?.name || ""}
+                                id={Number(activeId)}
+                                title={activeId.toString()}
+                                name={
+                                    boards.flatMap((c) => c.contentItems).find((item) => item.id === Number(activeId))
+                                        ?.name || ""
+                                }
                                 isDragOverlay
                             />
                         ))}

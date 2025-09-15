@@ -4,24 +4,27 @@ import addIcon from "@/assets/addIcon.png";
 import deleteIcon from "@/assets/deleteIcon.png";
 import editIcon from "@/assets/editIcon.png";
 import moveIcon from "@/assets/moveIcon.png";
+import { useConfirmModal } from "@/components/ui/confirm-modal";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Image from "next/image";
 import { useState } from "react";
 interface BoardProps {
-    id: string;
-    items: { id: string; name: string }[];
+    id: number;
+    items: { id: number; name: string }[];
+    title: string;
     isDragOverlay?: boolean;
-    handleEditBoard?: (boardId: string, newName: string) => void;
-    handleDeleteBoard?: (boardId: string) => void;
-    handleEditItem?: (itemId: string, newName: string) => void;
-    handleDeleteItem?: (itemId: string) => void;
-    handleAddItem?: (boardId: string, itemName: string) => void;
+    handleEditBoard?: (boardId: number, newName: string) => void;
+    handleDeleteBoard?: (boardId: number) => void;
+    handleEditItem?: (itemId: number, newName: string) => void;
+    handleDeleteItem?: (itemId: number) => void;
+    handleAddItem?: (boardId: number, itemName: string) => void;
     handleAddBoard?: (boardName: string) => void;
 }
 
 export function Board({
     id,
+    title,
     items,
     isDragOverlay,
     handleEditBoard,
@@ -32,16 +35,17 @@ export function Board({
     handleAddItem,
 }: BoardProps) {
     const [isEditMode, setIsEditMode] = useState(false);
-    const [editValue, setEditValue] = useState(id);
+    const [editValue, setEditValue] = useState(title);
     const [addValue, setAddValue] = useState("");
+    const { openConfirm, ConfirmModal } = useConfirmModal();
     const handleSubmit = () => {
-        if (editValue.trim() && editValue !== id) {
+        if (editValue.trim() && editValue !== title) {
             handleEditBoard?.(id, editValue);
         }
         setIsEditMode(false);
     };
     const handleAdd = () => {
-        if (addValue.trim() && id) {
+        if (addValue.trim() && title) {
             handleAddItem?.(id, addValue);
             setAddValue("");
         }
@@ -67,6 +71,7 @@ export function Board({
                 ${isDragOverlay ? "shadow-lg" : ""}
             `}
         >
+            <ConfirmModal />
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
                     <button {...attributes} {...listeners} className="cursor-move shrink-0">
@@ -91,14 +96,22 @@ export function Board({
                                 className="text-lg font-bold w-full"
                             />
                         ) : (
-                            <h2 className="text-lg font-bold w-full">{id}</h2>
+                            <h2 className="text-lg font-bold w-full">{title}</h2>
                         )}
                     </form>
                 </div>
 
                 <button
                     className="p-2 hover:rounded-full hover:bg-gray-200 shrink-0"
-                    onClick={() => handleDeleteBoard?.(id)}
+                    onClick={() =>
+                        openConfirm(() => handleDeleteBoard?.(Number(id)), {
+                            title: "보드 삭제",
+                            description: `"${title}" 보드를 정말 삭제하시겠습니까?`,
+                            confirmText: "삭제",
+                            cancelText: "취소",
+                            variant: "destructive",
+                        })
+                    }
                 >
                     <Image src={deleteIcon} alt="deleteIcon" width={20} height={20} />
                 </button>
@@ -107,7 +120,8 @@ export function Board({
                 {items.map((item) => (
                     <SortableItem
                         key={item.id}
-                        id={item.id}
+                        id={Number(item.id)}
+                        title={title}
                         name={item.name}
                         handleDeleteItem={handleDeleteItem}
                         handleEditItem={handleEditItem}

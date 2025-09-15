@@ -1,5 +1,5 @@
 export interface DndHelpers {
-    isSomeBoard: (id: string) => boolean;
-    findBoardIdx: (itemId: string) => number;
-    getBoardItems: (boardIndex: number) => { id: string; name: string }[];
+    isSomeBoard: (id: number) => boolean;
+    findBoardIdx: (itemId: number) => number;
+    getBoardItems: (boardIndex: number) => { id: number; name: string }[];
 }

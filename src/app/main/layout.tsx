@@ -1,3 +1,4 @@
+import Header from "@/app/components/Header";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -26,5 +27,10 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return <div>{children}</div>;
+    return (
+        <div>
+            <Header />
+            {children}
+        </div>
+    );
 }
