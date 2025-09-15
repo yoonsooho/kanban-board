@@ -1,81 +1,31 @@
-import { getAccessTokenFromCookie } from "@/lib/utils";
+import { commonApiJson } from "@/lib/commonApi";
 
 export const signIn = async (data: any) => {
-    const response = await fetch(`/api/auth/signin`, {
+    return await commonApiJson("/api/auth/signin", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(data),
+        body: data,
+        requireAuth: false, // 로그인은 인증이 필요없음
     });
-
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "로그인 실패"); // <- 여기서 throw
-    }
-    const result = await response.json();
-
-    // 쿠키는 서버에서 자동으로 설정됨
-    return result;
 };
 
 export const signUp = async (data: any) => {
-    const response = await fetch(`/api/auth/signup`, {
+    return await commonApiJson("/api/auth/signup", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(data),
+        body: data,
+        requireAuth: false, // 회원가입은 인증이 필요없음
     });
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "회원가입 실패"); // <- 여기서 throw
-    }
-    return response.json();
 };
 
 export const getUser = async () => {
-    const token = getAccessTokenFromCookie();
-    const headers: any = {
-        "Content-Type": "application/json",
-    };
-
-    if (token) {
-        headers.Authorization = `Bearer ${token}`;
-    }
-
-    const response = await fetch(`/api/users/me`, {
+    return await commonApiJson("/api/users/me", {
         method: "GET",
-        headers,
-        credentials: "include",
+        requireAuth: true, // 사용자 정보는 인증이 필요
     });
-
-    if (!response.ok) {
-        const error = new Error(`HTTP error! status: ${response.status}`);
-        (error as any).status = response.status;
-        (error as any).response = response;
-        throw error;
-    }
-
-    return response.json();
 };
 
 export const signOut = async () => {
-    const token = getAccessTokenFromCookie();
-    const headers: any = {
-        "Content-Type": "application/json",
-    };
-
-    if (token) {
-        headers.Authorization = `Bearer ${token}`;
-    }
-
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/auth/signout`, {
+    return await commonApiJson(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/auth/signout`, {
         method: "POST",
-        headers,
-        credentials: "include",
+        requireAuth: true, // 로그아웃은 인증이 필요
     });
-    return response.json();
 };

@@ -20,6 +20,7 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { useState } from "react";
 import { Board } from "./Board";
 import { SortableItem } from "./SortableItem";
+import { useGetSchedules, usePostSchedules } from "@/app/hooks/useSchedules";
 
 export default function DndBoard() {
     const [boards, setBoards] = useLocalStorage<boards>("boards", [

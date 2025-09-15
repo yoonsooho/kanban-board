@@ -15,22 +15,18 @@ function AuthLoadingContent() {
     useEffect(() => {
         const refreshToken = async () => {
             try {
-                console.log("토큰 갱신 시작...");
                 const response = await fetch("/api/auth/refresh-token", {
                     method: "POST",
                     credentials: "include",
                 });
 
                 if (response.ok) {
-                    console.log("토큰 갱신 성공, 리다이렉트:", redirectUrl);
                     // 히스토리에서 완전히 제거하기 위해 window.location.replace 사용
                     window.location.replace(redirectUrl);
                 } else {
-                    console.log("토큰 갱신 실패, 로그인 페이지로 이동");
                     window.location.replace("/");
                 }
             } catch (error) {
-                console.error("토큰 갱신 중 에러:", error);
                 window.location.replace("/");
             }
         };
