@@ -27,7 +27,7 @@ export const getUser = async () => {
 };
 
 export const signOut = async () => {
-    return await commonApiJson(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/auth/signout`, {
+    return await commonApiJson("/api/auth/signout", {
         method: "POST",
         requireAuth: true, // 로그아웃은 인증이 필요
         credentials: "include",
