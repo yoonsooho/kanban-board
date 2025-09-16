@@ -15,9 +15,6 @@ export async function POST(request: NextRequest) {
             throw new Error("NEXT_PUBLIC_API_URL 환경 변수가 설정되지 않았습니다");
         }
 
-        console.log("외부 API로 토큰 갱신 요청...");
-        const startTime = Date.now();
-
         // 외부 API로 토큰 갱신 요청
         const refreshResponse = await fetch(`${apiUrl}/auth/refresh`, {
             method: "GET",
@@ -27,16 +24,7 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        const endTime = Date.now();
-        console.log(`API 응답 시간: ${endTime - startTime}ms`);
-
-        if (!refreshResponse.ok) {
-            console.log("토큰 갱신 실패:", refreshResponse.status);
-            return NextResponse.json({ error: "Token refresh failed" }, { status: 401 });
-        }
-
         const responseData = await refreshResponse.json();
-        console.log("토큰 갱신 성공 - 백엔드에서 쿠키 설정됨");
 
         // 백엔드 응답의 쿠키를 브라우저로 전달
         const response = NextResponse.json({ success: true, data: responseData });
