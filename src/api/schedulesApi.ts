@@ -1,5 +1,5 @@
-import { commonApiJson } from "@/lib/commonApi";
-import { PostSchedulesType } from "@/app/type/ScheduleType";
+import { commonApiJson } from "@/api/commonApi";
+import { PostSchedulesType } from "@/type/ScheduleType";
 
 export const getSchedules = async () => {
     return await commonApiJson("/api/schedules", {

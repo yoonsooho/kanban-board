@@ -1,4 +1,4 @@
-import { commonApiJson } from "@/lib/commonApi";
+import { commonApiJson } from "@/api/commonApi";
 
 export const signIn = async (data: any) => {
     return await commonApiJson("/api/auth/signin", {

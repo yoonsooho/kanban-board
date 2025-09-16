@@ -1,7 +1,7 @@
 import { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { boards } from "../type/item";
-import { DndHelpers } from "../type/dndHelpers";
+import { boards } from "../../type/boards";
+import { DndHelpers } from "../../type/dndHelpers";
 import React from "react";
 
 const useDndHandlers = (

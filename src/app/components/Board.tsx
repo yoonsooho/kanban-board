@@ -11,7 +11,7 @@ import Image from "next/image";
 import { useState } from "react";
 interface BoardProps {
     id: number;
-    items: { id: number; name: string }[];
+    items: { id: number; text: string }[];
     title: string;
     isDragOverlay?: boolean;
     handleEditBoard?: (boardId: number, newName: string) => void;
@@ -122,7 +122,7 @@ export function Board({
                         key={item.id}
                         id={Number(item.id)}
                         title={title}
-                        name={item.name}
+                        name={item.text}
                         handleDeleteItem={handleDeleteItem}
                         handleEditItem={handleEditItem}
                     />

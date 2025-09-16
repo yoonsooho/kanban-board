@@ -1,24 +1,24 @@
-import { commonApi, commonApiJson } from "@/lib/commonApi";
-import { PostPostsType } from "@/app/type/postPosts";
+import { commonApi, commonApiJson } from "@/api/commonApi";
+import { contentItems } from "@/type/contentItems";
 
-export const getPosts = async (id: number) => {
-    return await commonApiJson(`/api/posts?scheduleId=${id}`, {
+export const getContentItems = async (postId: number) => {
+    return await commonApiJson(`/api/content-items?postId=${postId}`, {
         method: "GET",
         requireAuth: true, // 일정 조회는 인증이 필요
     });
 };
 
-export const postPosts = async (id: number, data: PostPostsType) => {
-    return await commonApiJson(`/api/posts?scheduleId=${id}`, {
+export const postContentItems = async (data: contentItems) => {
+    return await commonApiJson(`/api/content-items`, {
         method: "POST",
         body: data,
         requireAuth: true, // 일정 생성은 인증이 필요
     });
 };
 
-export const deletePosts = async (postId: number) => {
+export const deleteContentItems = async (id: number) => {
     // 삭제는 빈 응답을 반환할 수 있으므로 commonApi 사용
-    const response = await commonApi(`/api/posts/${postId}`, {
+    const response = await commonApi(`/api/content-items/${id}`, {
         method: "DELETE",
         requireAuth: true, // 일정 삭제는 인증이 필요
     });

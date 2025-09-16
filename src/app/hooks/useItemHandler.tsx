@@ -1,20 +1,37 @@
-import { generateId } from "@/app/lib/generateId";
-import { boards } from "@/app/type/item";
+import { useDeleteContentItems, usePostContentItems } from "@/app/hooks/useContentItem";
+import { boards } from "@/type/boards";
+import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
+import { toast } from "@/hooks/use-toast";
 
 const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) => {
+    const { mutate: postContentItems } = usePostContentItems();
+    const { mutate: deleteContentItems } = useDeleteContentItems();
+    const queryClient = useQueryClient();
     // 새 아이템 추가
-    const handleAddItem = (boardId: number, itemName: string) => {
+    const handleAddItem = (postId: number, itemName: string) => {
         if (itemName.trim() === "") return;
-
-        // setItems((prev) => {
-        //     return prev.map((el) => {
-        //         if (el.id === boardId) {
-        //             return { ...el, contentItems: [...el.contentItems, { name: itemName }] };
-        //         }
-        //         return el;
-        //     });
-        // });
+        postContentItems(
+            { text: itemName, post_id: postId },
+            {
+                onSuccess: (data) => {
+                    console.log(data);
+                    queryClient.invalidateQueries({ queryKey: ["posts"] });
+                    toast({
+                        title: "아이템 추가 완료",
+                        description: "아이템 추가 완료",
+                    });
+                },
+                onError: (error) => {
+                    console.log(error);
+                    toast({
+                        title: "아이템 추가 실패",
+                        description: "아이템 추가 실패",
+                        variant: "destructive",
+                    });
+                },
+            }
+        );
     };
 
     // 아이템 이름 수정
@@ -23,7 +40,7 @@ const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) 
             prev.map((board) => ({
                 ...board,
                 contentItems: board.contentItems.map((item) =>
-                    item.id === itemId ? { ...item, name: newName } : item
+                    item.id === itemId ? { ...item, text: newName } : item
                 ),
             }))
         );
@@ -31,9 +48,23 @@ const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) 
 
     // 아이템 삭제
     const handleDeleteItem = (itemId: number) => {
-        setItems((prev) =>
-            prev.map((board) => ({ ...board, contentItems: board.contentItems.filter((item) => item.id !== itemId) }))
-        );
+        deleteContentItems(itemId, {
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["posts"] });
+                toast({
+                    title: "아이템 삭제 완료",
+                    description: "아이템 삭제 완료",
+                });
+            },
+            onError: (error) => {
+                console.log(error);
+                toast({
+                    title: "아이템 삭제 실패",
+                    description: "아이템 삭제 실패",
+                    variant: "destructive",
+                });
+            },
+        });
     };
 
     return { handleAddItem, handleEditItem, handleDeleteItem };

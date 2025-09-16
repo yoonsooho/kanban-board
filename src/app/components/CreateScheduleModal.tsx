@@ -14,7 +14,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { ButtonLoading } from "@/components/ui/loading";
-import { PostSchedulesType } from "@/app/type/ScheduleType";
+import { PostSchedulesType } from "@/type/ScheduleType";
 
 interface CreateScheduleModalProps {
     isOpen: boolean;

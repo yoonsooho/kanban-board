@@ -1,5 +1,5 @@
 import { useDeletePosts, usePostPosts } from "@/app/hooks/usePost";
-import { boards } from "@/app/type/item";
+import { boards } from "@/type/boards";
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 

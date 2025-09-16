@@ -1,13 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { deletePosts, getPosts, postPosts } from "@/lib/postApi";
-import { PostPostsType } from "@/app/type/postPosts";
-import { boards } from "@/app/type/item";
+import { deletePosts, getPosts, postPosts } from "@/api/postApi";
+import { PostPostsType } from "@/type/postPosts";
+import { boards } from "@/type/boards";
 
-export const useGetPosts = (id: number, initialData?: boards) => {
+export const useGetPosts = (scheduleId: number, initialData?: boards) => {
     return useQuery({
-        queryKey: ["posts", id],
-        enabled: !!id,
-        queryFn: () => getPosts(id),
+        queryKey: ["posts", scheduleId],
+        enabled: !!scheduleId,
+        queryFn: () => getPosts(scheduleId),
         initialData, // 서버에서 받은 posts 넣기
     });
 };

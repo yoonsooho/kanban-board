@@ -5,7 +5,7 @@ import useBoardHandler from "@/app/hooks/useBoardHandler";
 import useDndHandlers from "@/app/hooks/useDndHandlers";
 import useItemHandler from "@/app/hooks/useItemHandler";
 import { helpers } from "@/app/lib/helpers";
-import { boards } from "@/app/type/item";
+import { boards } from "@/type/boards";
 import {
     DndContext,
     DragOverlay,
@@ -16,17 +16,17 @@ import {
     useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, horizontalListSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Board } from "./Board";
 import { SortableItem } from "./SortableItem";
 import { useGetPosts } from "@/app/hooks/usePost";
 import { PageLoading } from "@/components/ui/loading";
-import { getPosts } from "@/lib/postApi";
-import { useQuery } from "@tanstack/react-query";
+import { toast } from "@/hooks/use-toast";
 
 export default function DndBoard({ scheduleId }: { scheduleId: number }) {
-    const { data: boardsData, isLoading } = useGetPosts(scheduleId);
-    const [boards, setBoards] = useState<boards>(boardsData || []);
+    const { data: boardsData } = useGetPosts(scheduleId);
+    const [boards, setBoards] = useState<boards>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [activeId, setActiveId] = useState<number | null>(null);
     const [newBoard, setNewBoard] = useState("");
@@ -47,11 +47,12 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (boardsData) setBoards(boardsData);
+        setIsLoading(false);
     }, [boardsData]);
 
-    if (isLoading) return <PageLoading />;
+    if (isLoading) return <PageLoading text="일정을 로딩중입니다..." />;
 
     return (
         <div className="p-8">
@@ -83,10 +84,6 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
                             <form
                                 onSubmit={(e) => {
                                     e.preventDefault();
-                                    if (boards.some((board) => board.id === Number(newBoard))) {
-                                        alert("이미 존재하는 보드입니다.");
-                                        return;
-                                    }
                                     if (!newBoard.trim()) return; // 빈 문자열 체크
                                     handleAddBoard(newBoard);
                                     setNewBoard("");
@@ -118,7 +115,7 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
                         (helper.isSomeBoard(activeId) ? (
                             <Board
                                 id={Number(activeId)}
-                                title={activeId.toString()}
+                                title={boards.find((c) => c.id === activeId)?.title || ""}
                                 items={boards.find((c) => c.id === activeId)?.contentItems || []}
                                 isDragOverlay
                             />
@@ -128,7 +125,7 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
                                 title={activeId.toString()}
                                 name={
                                     boards.flatMap((c) => c.contentItems).find((item) => item.id === Number(activeId))
-                                        ?.name || ""
+                                        ?.text || ""
                                 }
                                 isDragOverlay
                             />

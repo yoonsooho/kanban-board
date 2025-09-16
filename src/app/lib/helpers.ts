@@ -1,4 +1,4 @@
-import { boards } from "@/app/type/item";
+import { boards } from "@/type/boards";
 // 보드나 아이템의 위치를 찾는 헬퍼 함수들
 export const helpers = (items: boards) => ({
     isSomeBoard: (id: number) => items.some((board) => board.id === id),
