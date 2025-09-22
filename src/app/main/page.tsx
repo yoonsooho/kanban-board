@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import CreateScheduleModal from "@/app/components/CreateScheduleModal";
-import { useGetSchedules, usePostSchedules } from "@/app/hooks/useSchedules";
+import { usePostSchedules } from "@/app/hooks/useSchedules";
 import { PostSchedulesType } from "@/type/ScheduleType";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -12,7 +12,6 @@ import ScheduleList from "@/app/components/ScheduleList";
 const Main = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const queryClient = useQueryClient();
-    const { data: schedules } = useGetSchedules();
 
     const { mutate: postSchedules } = usePostSchedules();
     const { toast } = useToast();
@@ -45,7 +44,7 @@ const Main = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             <main className="py-6">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="mb-6">
                         <Button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2">
                             <PlusIcon className="h-4 w-4" />새 일정 만들기

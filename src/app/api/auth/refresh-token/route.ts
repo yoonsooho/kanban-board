@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
         const refreshToken = request.cookies.get("refresh_token")?.value;
 
         if (!refreshToken) {
-            console.log("refresh_token이 없습니다");
             return NextResponse.json({ error: "No refresh token" }, { status: 401 });
         }
 
@@ -31,7 +30,6 @@ export async function POST(request: NextRequest) {
 
         // 백엔드 응답의 Set-Cookie 헤더를 그대로 전달
         const setCookieHeaders = refreshResponse.headers.get("set-cookie");
-        console.log("setCookieHeaders", setCookieHeaders);
         if (setCookieHeaders) {
             response.headers.set("Set-Cookie", setCookieHeaders);
         }
