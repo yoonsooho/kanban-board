@@ -137,7 +137,7 @@ const ScheduleList = () => {
                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                                 />
                             </svg>
-                            위의 "새 일정 만들기" 버튼을 클릭하세요
+                            위의 &quot;새 일정 만들기&quot; 버튼을 클릭하세요
                         </div>
                     </div>
                 </div>
