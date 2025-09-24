@@ -14,7 +14,7 @@ export function LoadingOverlay({
     open,
     text = "처리 중입니다...",
     zIndex = 9999,
-    blur = true,
+    blur = false,
     className,
 }: LoadingOverlayProps) {
     if (!open) return null;
