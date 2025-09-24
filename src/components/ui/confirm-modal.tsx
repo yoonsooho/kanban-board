@@ -11,7 +11,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-interface ConfirmModalProps {
+export interface ConfirmModalProps {
     isOpen: boolean;
     onClose: () => void;
     onConfirm: () => void;

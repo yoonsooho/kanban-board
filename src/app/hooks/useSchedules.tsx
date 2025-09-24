@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getAccessTokenFromCookie } from "@/lib/utils";
-import { getSchedules, postSchedules, deleteSchedules } from "@/api/schedulesApi";
+import { getSchedules, postSchedules, deleteSchedules, updateSchedules } from "@/api/schedulesApi";
 import { PostSchedulesType } from "@/type/ScheduleType";
 
 export const useGetSchedules = () => {
@@ -13,6 +13,13 @@ export const usePostSchedules = () => {
     return useMutation({
         mutationFn: (data: PostSchedulesType) => {
             return postSchedules(data);
+        },
+    });
+};
+export const useUpdateSchedules = () => {
+    return useMutation({
+        mutationFn: (data: PostSchedulesType & { id: string }) => {
+            return updateSchedules(data);
         },
     });
 };

@@ -2,12 +2,12 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
-import CreateScheduleModal from "@/app/components/CreateScheduleModal";
+import CreateScheduleModal from "@/app/components/main/modal/CreateScheduleModal";
 import { usePostSchedules } from "@/app/hooks/useSchedules";
 import { PostSchedulesType } from "@/type/ScheduleType";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
-import ScheduleList from "@/app/components/ScheduleList";
+import ScheduleList from "@/app/components/main/ScheduleList";
 
 const Main = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);

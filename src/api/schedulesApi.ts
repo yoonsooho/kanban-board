@@ -22,3 +22,11 @@ export const deleteSchedules = async (id: string) => {
         requireAuth: true, // 일정 삭제는 인증이 필요
     });
 };
+
+export const updateSchedules = async (data: PostSchedulesType & { id: string }) => {
+    return await commonApiJson(`/api/schedules/${data.id}`, {
+        method: "PATCH",
+        body: { ...data, id: undefined },
+        requireAuth: true, // 일정 수정은 인증이 필요
+    });
+};

@@ -33,7 +33,6 @@ export default function CreateScheduleModal({ isOpen, onClose, onSubmit }: Creat
 
     const handleFormSubmit = async (data: PostSchedulesType) => {
         try {
-            console.log("data", data);
             setIsLoading(true);
             await onSubmit(data);
             reset(); // 폼 초기화
