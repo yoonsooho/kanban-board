@@ -3,6 +3,7 @@
 import { useGetUser, useSignOut } from "@/app/hooks/apiHook/useAuth";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function Header() {
     const [mounted, setMounted] = useState(false);
@@ -19,7 +20,9 @@ export default function Header() {
                 <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex-shrink-0">
-                            <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
+                            <Link href="/main">
+                                <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
+                            </Link>
                         </div>
                         <div className="flex items-center space-x-4">
                             <div className="animate-pulse bg-gray-200 h-8 w-20 rounded"></div>
@@ -41,7 +44,9 @@ export default function Header() {
                 <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex-shrink-0">
-                            <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
+                            <Link href="/main">
+                                <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
+                            </Link>
                         </div>
                         <div className="flex items-center space-x-4">
                             <div className="animate-pulse bg-gray-200 h-8 w-20 rounded"></div>
@@ -59,7 +64,9 @@ export default function Header() {
                 <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex-shrink-0">
-                            <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
+                            <Link href="/main">
+                                <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
+                            </Link>
                         </div>
                         <div className="flex items-center space-x-4">
                             <span className="text-red-500 text-sm">사용자 정보 로딩 실패</span>
@@ -78,7 +85,9 @@ export default function Header() {
             <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     <div className="flex-shrink-0">
-                        <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
+                        <Link href="/main">
+                            <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
+                        </Link>
                     </div>
 
                     <div className="flex items-center space-x-4">
