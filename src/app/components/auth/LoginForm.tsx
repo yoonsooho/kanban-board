@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetUser, useSignIn, useSignOut } from "@/app/hooks/useAuth";
+import { useGetUser, useSignIn, useSignOut } from "@/app/hooks/apiHook/useAuth";
 
 const loginSchema = z.object({
     userId: z.string().min(1, "사용자 ID를 입력해주세요"),

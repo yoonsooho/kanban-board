@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -69,7 +69,6 @@ export default function UpdateScheduleModal({ isOpen, onClose, onSubmit, default
                     <DialogTitle>일정 수정</DialogTitle>
                     <DialogDescription>일정의 제목과 기간을 입력해주세요.</DialogDescription>
                 </DialogHeader>
-
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="title">제목</Label>

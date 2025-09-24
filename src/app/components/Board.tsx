@@ -8,7 +8,7 @@ import { useConfirmModal } from "@/components/ui/confirm-modal";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 interface BoardProps {
     id: number;
     items: { id: number; text: string }[];
@@ -38,13 +38,15 @@ export function Board({
     const [editValue, setEditValue] = useState(title);
     const [addValue, setAddValue] = useState("");
     const { openConfirm, ConfirmModal } = useConfirmModal();
-    const handleSubmit = () => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (editValue.trim() && editValue !== title) {
             handleEditBoard?.(id, editValue);
         }
         setIsEditMode(false);
     };
-    const handleAdd = () => {
+    const handleAdd = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (addValue.trim() && title) {
             handleAddItem?.(id, addValue);
             setAddValue("");
@@ -86,13 +88,13 @@ export function Board({
                     >
                         <Image src={editIcon} alt="editIcon" width={20} height={20} />
                     </button>
-                    <form className="flex items-center" onSubmit={handleSubmit}>
+                    <form className="flex items-center" onSubmit={(e) => handleSubmit(e)}>
                         {isEditMode ? (
                             <input
                                 type="text"
                                 value={editValue}
                                 onChange={(e) => setEditValue(e.target.value)}
-                                onBlur={handleSubmit}
+                                onBlur={(e) => handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>)}
                                 className="text-lg font-bold w-full"
                             />
                         ) : (
@@ -131,7 +133,7 @@ export function Board({
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
-                    handleAdd();
+                    handleAdd(e);
                 }}
                 className="flex items-center gap-2 mt-4 p-2 bg-white rounded-lg shadow-sm"
             >

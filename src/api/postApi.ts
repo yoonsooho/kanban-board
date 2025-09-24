@@ -16,6 +16,20 @@ export const postPosts = async (id: number, data: PostPostsType) => {
     });
 };
 
+export const updatePosts = async (scheduleId: number, data: PostPostsType) => {
+    return await commonApiJson(`/api/posts/${scheduleId}`, {
+        method: "PATCH",
+        body: data,
+        requireAuth: true, // 일정 수정은 인증이 필요
+    });
+};
+export const updateSeqPosts = async (scheduleId: number, data: PostPostsType[]) => {
+    return await commonApiJson(`/api/posts/${scheduleId}/seq`, {
+        method: "PATCH",
+        body: data,
+        requireAuth: true, // 일정 수정은 인증이 필요
+    });
+};
 export const deletePosts = async (postId: number) => {
     // 삭제는 빈 응답을 반환할 수 있으므로 commonApi 사용
     const response = await commonApi(`/api/posts/${postId}`, {

@@ -1,5 +1,5 @@
 "use client";
-import { useGetSchedules } from "@/app/hooks/useSchedules";
+import { useGetSchedules } from "@/app/hooks/apiHook/useSchedules";
 import { GetSchedulesType } from "@/type/ScheduleType";
 import React from "react";
 import { useConfirmModal } from "@/components/ui/confirm-modal";

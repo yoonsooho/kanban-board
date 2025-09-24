@@ -16,12 +16,14 @@ import {
     useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, horizontalListSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { useLayoutEffect, useState } from "react";
+import { Suspense, useLayoutEffect, useState } from "react";
 import { Board } from "./Board";
 import { SortableItem } from "./SortableItem";
-import { useGetPosts } from "@/app/hooks/usePost";
+import { useGetPosts } from "@/app/hooks/apiHook/usePost";
 import { PageLoading } from "@/components/ui/loading";
 import { toast } from "@/hooks/use-toast";
+import { useMutationState } from "@tanstack/react-query";
+import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 export default function DndBoard({ scheduleId }: { scheduleId: number }) {
     const { data: boardsData } = useGetPosts(scheduleId);
@@ -47,6 +49,14 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
+
+    const postsPending = useMutationState({
+        filters: { status: "pending", mutationKey: ["posts"] },
+    });
+    const contentItemsPending = useMutationState({
+        filters: { status: "pending", mutationKey: ["contentItems"] },
+    });
+
     useLayoutEffect(() => {
         if (boardsData) setBoards(boardsData);
         setIsLoading(false);
@@ -54,8 +64,11 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
 
     if (isLoading) return <PageLoading text="일정을 로딩중입니다..." />;
 
+    const isMutating = postsPending.length > 0 || contentItemsPending.length > 0;
+
     return (
         <div className="p-8">
+            <LoadingOverlay open={isMutating} text="업데이트 중입니다..." />
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCorners}

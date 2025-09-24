@@ -11,6 +11,7 @@ import { contentItems } from "@/type/contentItems";
 // };
 export const usePostContentItems = () => {
     return useMutation({
+        mutationKey: ["contentItems"],
         mutationFn: (data: contentItems) => {
             return postContentItems(data);
         },
@@ -18,6 +19,7 @@ export const usePostContentItems = () => {
 };
 export const useDeleteContentItems = () => {
     return useMutation({
+        mutationKey: ["contentItems"],
         mutationFn: (id: number) => {
             return deleteContentItems(id);
         },

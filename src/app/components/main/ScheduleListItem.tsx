@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { EditIcon } from "lucide-react";
 import { Trash } from "lucide-react";
 import { ConfirmModalProps, useConfirmModal } from "@/components/ui/confirm-modal";
-import { useDeleteSchedules, useUpdateSchedules } from "@/app/hooks/useSchedules";
+import { useDeleteSchedules, useUpdateSchedules } from "@/app/hooks/apiHook/useSchedules";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import UpdateScheduleModal from "@/app/components/main/modal/UpdateScheduleModal";

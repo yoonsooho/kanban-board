@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetUser, useSignOut } from "@/app/hooks/useAuth";
+import { useGetUser, useSignOut } from "@/app/hooks/apiHook/useAuth";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 

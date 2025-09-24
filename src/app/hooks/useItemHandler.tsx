@@ -1,4 +1,4 @@
-import { useDeleteContentItems, usePostContentItems } from "@/app/hooks/useContentItem";
+import { useDeleteContentItems, usePostContentItems } from "@/app/hooks/apiHook/useContentItem";
 import { boards } from "@/type/boards";
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";

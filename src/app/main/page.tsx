@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import CreateScheduleModal from "@/app/components/main/modal/CreateScheduleModal";
-import { usePostSchedules } from "@/app/hooks/useSchedules";
+import { usePostSchedules } from "@/app/hooks/apiHook/useSchedules";
 import { PostSchedulesType } from "@/type/ScheduleType";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";

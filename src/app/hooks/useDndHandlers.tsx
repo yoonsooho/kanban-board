@@ -3,6 +3,9 @@ import { arrayMove } from "@dnd-kit/sortable";
 import { boards } from "../../type/boards";
 import { DndHelpers } from "../../type/dndHelpers";
 import React from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUpdatePosts, useUpdateSeqPosts } from "@/app/hooks/apiHook/usePost";
+import { toast } from "@/hooks/use-toast";
 
 const useDndHandlers = (
     items: boards,
@@ -11,6 +14,9 @@ const useDndHandlers = (
     helpers: DndHelpers,
     scheduleId: number
 ) => {
+    const queryClient = useQueryClient();
+    const { mutate: updateSeqPosts } = useUpdateSeqPosts(scheduleId);
+
     const handleDragStart = ({ active }: DragStartEvent) => {
         setActiveId(active.id as number);
     };
@@ -23,9 +29,35 @@ const useDndHandlers = (
 
         // 보드 이동
         if (helpers.isSomeBoard(activeItemId)) {
+            const oldPosts = items.find((c) => c.id === activeItemId);
+            const newPosts = items.find((c) => c.id === overItemId);
             const oldIndex = items.findIndex((c) => c.id === activeItemId);
             const newIndex = items.findIndex((c) => c.id === overItemId);
             setItems(arrayMove(items, oldIndex, newIndex));
+
+            if (oldPosts && newPosts && oldIndex !== newIndex) {
+                const newItems = [
+                    { ...oldPosts, seq: newIndex + 1 },
+                    { ...newPosts, seq: oldIndex + 1 },
+                ];
+                updateSeqPosts(newItems, {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({ queryKey: ["posts", scheduleId] });
+                        toast({
+                            title: "아이템 이동을 완료했습니다.",
+                            description: "아이템 이동을 완료했습니다.",
+                        });
+                    },
+                    onError: (error) => {
+                        console.error("아이템 이동 실패:", error);
+                        toast({
+                            title: "아이템 이동을 실패했습니다.",
+                            description: "아이템 이동을 실패했습니다.",
+                            variant: "destructive",
+                        });
+                    },
+                });
+            }
             return;
         }
 
