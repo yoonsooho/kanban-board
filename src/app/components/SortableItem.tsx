@@ -46,7 +46,7 @@ export function SortableItem({ id, name, isDragOverlay, handleDeleteItem, handle
         <div
             ref={setNodeRef}
             style={style}
-            className={`p-4 mb-2 bg-white rounded shadow transition-shadow duration-300
+            className={`p-4 mb-2 bg-white rounded shadow transition-shadow duration-300  
                 ${isDragging ? "border-2 border-blue-500" : ""}
                 ${isDragOverlay ? "shadow-lg" : ""}
             `}

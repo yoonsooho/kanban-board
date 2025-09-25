@@ -1,7 +1,7 @@
 "use client";
 
 import useBoardHandler from "@/app/hooks/useBoardHandler";
-
+import { SortableItem } from "./SortableItem";
 import useDndHandlers from "@/app/hooks/useDndHandlers";
 import useItemHandler from "@/app/hooks/useItemHandler";
 import { helpers } from "@/app/lib/helpers";
@@ -15,19 +15,18 @@ import {
     useSensor,
     useSensors,
 } from "@dnd-kit/core";
-import { SortableContext, horizontalListSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { Suspense, useLayoutEffect, useState } from "react";
+import { SortableContext, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { useLayoutEffect, useState } from "react";
+
 import { Board } from "./Board";
-import { SortableItem } from "./SortableItem";
 import { useGetPosts } from "@/app/hooks/apiHook/usePost";
 import { PageLoading } from "@/components/ui/loading";
-import { toast } from "@/hooks/use-toast";
+
 import { useMutationState } from "@tanstack/react-query";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 export default function DndBoard({ scheduleId }: { scheduleId: number }) {
     const { data: boardsData } = useGetPosts(scheduleId);
-    console.log("boardsData", boardsData);
     const [boards, setBoards] = useState<boards>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -50,7 +49,6 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
-    console.log("activeId", activeId);
 
     const postsPending = useMutationState({
         filters: { status: "pending", mutationKey: ["posts"] },
@@ -88,7 +86,6 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
                                 items={board.contentItems}
                                 handleEditBoard={handleEditBoard}
                                 handleDeleteBoard={handleDeleteBoard}
-                                handleAddBoard={handleAddBoard}
                                 handleEditItem={handleEditItem}
                                 handleDeleteItem={handleDeleteItem}
                                 handleAddItem={handleAddItem}

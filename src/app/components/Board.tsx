@@ -19,7 +19,6 @@ interface BoardProps {
     handleEditItem?: (itemId: number, newName: string) => void;
     handleDeleteItem?: (itemId: number) => void;
     handleAddItem?: (boardId: number, itemName: string) => void;
-    handleAddBoard?: (boardName: string) => void;
 }
 
 export function Board({
@@ -31,7 +30,6 @@ export function Board({
     handleDeleteBoard,
     handleEditItem,
     handleDeleteItem,
-    handleAddBoard,
     handleAddItem,
 }: BoardProps) {
     const [isEditMode, setIsEditMode] = useState(false);
@@ -118,17 +116,19 @@ export function Board({
                     <Image src={deleteIcon} alt="deleteIcon" width={20} height={20} />
                 </button>
             </div>
-            <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
-                {items.map((item) => (
-                    <SortableItem
-                        key={item.id}
-                        id={Number(item.id)}
-                        name={item.text}
-                        handleDeleteItem={handleDeleteItem}
-                        handleEditItem={handleEditItem}
-                    />
-                ))}
-            </SortableContext>
+            <div className="h-96 overflow-y-auto">
+                <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
+                    {items.map((item) => (
+                        <SortableItem
+                            key={item.id}
+                            id={Number(item.id)}
+                            name={item.text}
+                            handleDeleteItem={handleDeleteItem}
+                            handleEditItem={handleEditItem}
+                        />
+                    ))}
+                </SortableContext>
+            </div>
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
