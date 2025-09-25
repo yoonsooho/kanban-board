@@ -123,7 +123,6 @@ export function Board({
                     <SortableItem
                         key={item.id}
                         id={Number(item.id)}
-                        title={title}
                         name={item.text}
                         handleDeleteItem={handleDeleteItem}
                         handleEditItem={handleEditItem}

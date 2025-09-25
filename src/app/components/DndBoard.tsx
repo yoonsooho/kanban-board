@@ -27,6 +27,7 @@ import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 export default function DndBoard({ scheduleId }: { scheduleId: number }) {
     const { data: boardsData } = useGetPosts(scheduleId);
+    console.log("boardsData", boardsData);
     const [boards, setBoards] = useState<boards>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -49,6 +50,7 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
+    console.log("activeId", activeId);
 
     const postsPending = useMutationState({
         filters: { status: "pending", mutationKey: ["posts"] },
@@ -135,7 +137,6 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
                         ) : (
                             <SortableItem
                                 id={Number(activeId)}
-                                title={activeId.toString()}
                                 name={
                                     boards.flatMap((c) => c.contentItems).find((item) => item.id === Number(activeId))
                                         ?.text || ""

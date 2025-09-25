@@ -7,7 +7,6 @@ import { CSS } from "@dnd-kit/utilities";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 interface SortableItemProps {
-    title: string;
     id: number;
     name: string;
     isDragOverlay?: boolean;
@@ -15,7 +14,7 @@ interface SortableItemProps {
     handleEditItem?: (itemId: number, newName: string) => void;
 }
 
-export function SortableItem({ id, name, title, isDragOverlay, handleDeleteItem, handleEditItem }: SortableItemProps) {
+export function SortableItem({ id, name, isDragOverlay, handleDeleteItem, handleEditItem }: SortableItemProps) {
     const [isEditMode, setIsEditMode] = useState(false);
     const [editValue, setEditValue] = useState(name);
     const editRef = useRef<HTMLInputElement>(null);
