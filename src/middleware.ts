@@ -8,7 +8,9 @@ export async function middleware(request: NextRequest) {
         pathname.startsWith("/auth") ||
         pathname.startsWith("/auth-loading") ||
         pathname.startsWith("/_next") ||
-        pathname.startsWith("/api")
+        pathname.startsWith("/api") ||
+        pathname === "/robots.txt" ||
+        pathname === "/sitemap.xml"
     ) {
         return NextResponse.next();
     }
