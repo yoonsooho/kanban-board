@@ -33,7 +33,7 @@ const useDndHandlers = (
             const newIndex = items.findIndex((c) => c.id === overItemId);
             let updatedItems = arrayMove(items, oldIndex, newIndex);
             setItems(updatedItems);
-            let updatedSeqItems = updatedItems.map((item, index) => ({ ...item, seq: index + 1 }));
+            let updatedSeqItems = updatedItems.map((item, index) => ({ id: item.id, seq: index + 1 }));
 
             if (oldIndex !== newIndex) {
                 updateSeqPosts(updatedSeqItems, {

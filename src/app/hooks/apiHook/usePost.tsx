@@ -30,7 +30,7 @@ export const useUpdatePosts = (scheduleId: number) => {
 export const useUpdateSeqPosts = (scheduleId: number) => {
     return useMutation({
         mutationKey: ["posts", scheduleId],
-        mutationFn: (data: PostPostsType[]) => {
+        mutationFn: (data: { id: number; seq: number }[]) => {
             return updateSeqPosts(scheduleId, data);
         },
     });

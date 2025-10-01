@@ -23,7 +23,7 @@ export const updatePosts = async (scheduleId: number, data: PostPostsType) => {
         requireAuth: true, // 일정 수정은 인증이 필요
     });
 };
-export const updateSeqPosts = async (scheduleId: number, data: PostPostsType[]) => {
+export const updateSeqPosts = async (scheduleId: number, data: { id: number; seq: number }[]) => {
     return await commonApiJson(`/api/posts/${scheduleId}/seq`, {
         method: "PATCH",
         body: data,
