@@ -41,8 +41,6 @@ export const commonApi = async (url: string, options: CommonApiOptions = {}): Pr
 
     // 401 에러(Unauthorized)이고 인증이 필요한 API인 경우 토큰 재발급 시도
     if (response.status === 401 && requireAuth) {
-        console.log("401 에러 감지, 토큰 재발급 시도...");
-
         try {
             // 토큰 재발급 요청
             const refreshResponse = await fetch("/api/auth/refresh-token", {
@@ -51,8 +49,6 @@ export const commonApi = async (url: string, options: CommonApiOptions = {}): Pr
             });
 
             if (refreshResponse.ok) {
-                console.log("토큰 재발급 성공, 원본 요청 재시도...");
-
                 // 새로운 토큰으로 헤더 업데이트
                 const newToken = getAccessTokenFromCookie();
                 if (newToken) {
@@ -67,7 +63,6 @@ export const commonApi = async (url: string, options: CommonApiOptions = {}): Pr
                     body: body ? JSON.stringify(body) : undefined,
                 });
             } else {
-                console.log("토큰 재발급 실패, 로그인 페이지로 리디렉션 필요");
                 // 토큰 재발급이 실패한 경우 로그인 페이지로 리디렉션
                 window.location.href = "/";
                 throw new Error("인증이 만료되었습니다. 다시 로그인해주세요.");

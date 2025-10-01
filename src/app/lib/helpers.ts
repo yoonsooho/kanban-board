@@ -3,5 +3,6 @@ import { boards } from "@/type/boards";
 export const helpers = (items: boards) => ({
     isSomeBoard: (id: number) => items.some((board) => board.id === id),
     findBoardIdx: (itemId: number) => items.findIndex((board) => board.contentItems.some((item) => item.id === itemId)),
+    findBoard: (itemId: number) => items.find((board) => board.contentItems.some((item) => item.id === itemId)),
     getBoardItems: (boardIndex: number) => items[boardIndex]?.contentItems || [],
 });

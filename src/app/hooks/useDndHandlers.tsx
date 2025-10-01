@@ -1,21 +1,24 @@
 import { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { boards } from "../../type/boards";
+import { board, boards } from "../../type/boards";
 import { DndHelpers } from "../../type/dndHelpers";
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUpdatePosts, useUpdateSeqPosts } from "@/app/hooks/apiHook/usePost";
 import { toast } from "@/hooks/use-toast";
+import { useUpdateMoveContentItems } from "@/app/hooks/apiHook/useContentItem";
 
 const useDndHandlers = (
     items: boards,
     setItems: React.Dispatch<React.SetStateAction<boards>>,
     setActiveId: (id: number | null) => void,
     helpers: DndHelpers,
-    scheduleId: number
+    scheduleId: number,
+    firstActiveBoardId: number | null
 ) => {
     const queryClient = useQueryClient();
     const { mutate: updateSeqPosts } = useUpdateSeqPosts(scheduleId);
+    const { mutate: updateMoveContentItems } = useUpdateMoveContentItems();
 
     const handleDragStart = ({ active }: DragStartEvent) => {
         setActiveId(active.id as number);
@@ -27,14 +30,13 @@ const useDndHandlers = (
         const activeItemId = active.id as number;
         const overItemId = over.id as number;
 
-        // 보드 이동
+        // 보드가 이동할때 이동하는 경우
         if (helpers.isSomeBoard(activeItemId)) {
             const oldIndex = items.findIndex((c) => c.id === activeItemId);
             const newIndex = items.findIndex((c) => c.id === overItemId);
             let updatedItems = arrayMove(items, oldIndex, newIndex);
             setItems(updatedItems);
             let updatedSeqItems = updatedItems.map((item, index) => ({ id: item.id, seq: index + 1 }));
-
             if (oldIndex !== newIndex) {
                 updateSeqPosts(updatedSeqItems, {
                     onSuccess: () => {
@@ -57,21 +59,51 @@ const useDndHandlers = (
             return;
         }
 
-        // 같은 보드 내 아이템 이동
+        // 아이템이 이동하는 경우
         const activeBoardIdx = helpers.findBoardIdx(activeItemId);
-        const overBoardIdx = helpers.findBoardIdx(overItemId);
-        if (activeBoardIdx === overBoardIdx && activeBoardIdx !== -1) {
-            const boardItems = helpers.getBoardItems(activeBoardIdx);
-            const oldIndex = boardItems.findIndex((item) => item.id === activeItemId);
-            const newIndex = boardItems.findIndex((item) => item.id === overItemId);
+        const moveBeforePostItems = items.find((item) => item.contentItems.some((c) => c.id === overItemId));
+        const moveAfterPostItems = items.find((item) => item.contentItems.some((c) => c.id === activeItemId));
 
-            setItems((prev: boards) => {
-                const newItems = [...prev];
-                newItems[activeBoardIdx].contentItems = arrayMove(boardItems, oldIndex, newIndex);
-                return newItems;
-            });
-        }
+        // if (activeBoardIdx && activeBoardIdx !== -1) {
+        const boardItems = helpers.getBoardItems(activeBoardIdx);
+        const oldIndex = boardItems.findIndex((item) => item.id === activeItemId);
+        const newIndex = boardItems.findIndex((item) => item.id === overItemId);
+        setItems((prev: boards) => {
+            const newItems = [...prev];
+            newItems[activeBoardIdx].contentItems = arrayMove(boardItems, oldIndex, newIndex);
+            return newItems;
+        });
 
+        if (!moveBeforePostItems || !moveAfterPostItems || !firstActiveBoardId) return;
+        updateMoveContentItems(
+            {
+                contentItemId: activeItemId,
+                fromPostId: firstActiveBoardId.toString(),
+                toPostId: moveBeforePostItems.id.toString(),
+                toPostContentItems: moveAfterPostItems.contentItems.map((item, i) => ({
+                    id: item.id,
+                    seq: i + 1,
+                })),
+            },
+            {
+                onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ["posts", scheduleId] });
+                    toast({
+                        title: "아이템 이동을 완료했습니다.",
+                        description: "아이템 이동을 완료했습니다.",
+                    });
+                },
+                onError: (error) => {
+                    console.error("아이템 이동 실패:", error);
+                    toast({
+                        title: "아이템 이동을 실패했습니다.",
+                        description: "아이템 이동을 실패했습니다.",
+                        variant: "destructive",
+                    });
+                },
+            }
+        );
+        // }
         setActiveId(null);
     };
 

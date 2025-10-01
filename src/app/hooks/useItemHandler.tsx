@@ -15,7 +15,6 @@ const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) 
             { text: itemName, post_id: postId },
             {
                 onSuccess: (data) => {
-                    console.log(data);
                     queryClient.invalidateQueries({ queryKey: ["posts"] });
                     toast({
                         title: "아이템 추가 완료",

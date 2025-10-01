@@ -1,5 +1,5 @@
 import { commonApi, commonApiJson } from "@/api/commonApi";
-import { contentItems } from "@/type/contentItems";
+import { postContentItemsType, moveContentItems } from "@/type/contentItems";
 
 export const getContentItems = async (postId: number) => {
     return await commonApiJson(`/api/content-items?postId=${postId}`, {
@@ -8,7 +8,7 @@ export const getContentItems = async (postId: number) => {
     });
 };
 
-export const postContentItems = async (data: contentItems) => {
+export const postContentItems = async (data: postContentItemsType) => {
     return await commonApiJson(`/api/content-items`, {
         method: "POST",
         body: data,
@@ -33,4 +33,12 @@ export const deleteContentItems = async (id: number) => {
     } catch {
         return { success: true, message: "삭제 완료" };
     }
+};
+
+export const updateMoveContentItems = async (data: moveContentItems) => {
+    return await commonApiJson(`/api/content-items/move`, {
+        method: "PUT",
+        body: data,
+        requireAuth: true, // 일정 이동은 인증이 필요
+    });
 };

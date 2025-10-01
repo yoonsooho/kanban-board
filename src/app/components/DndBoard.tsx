@@ -30,15 +30,17 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
     const [boards, setBoards] = useState<boards>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const [activeId, setActiveId] = useState<number | null>(null);
+    const [activeId, setActiveId] = useState<number | null>(null); //items와 activeId둘다 변경될때 실행 따라서 두개의 아이디를 공용해서 사용하는 state
     const [newBoard, setNewBoard] = useState("");
+    const [firstActiveBoardId, setFirstActiveBoardId] = useState<number | null>(null);
     const helper = helpers(boards);
     const { handleDragStart, handleDragEnd, handleDragOver } = useDndHandlers(
         boards,
         setBoards,
         setActiveId,
         helper,
-        scheduleId
+        scheduleId,
+        firstActiveBoardId
     );
     const { handleAddItem, handleEditItem, handleDeleteItem } = useItemHandler(setBoards);
     const { handleAddBoard, handleEditBoard, handleDeleteBoard } = useBoardHandler(setBoards, scheduleId);
@@ -72,9 +74,18 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCorners}
-                onDragStart={handleDragStart}
+                onDragStart={(e) => {
+                    handleDragStart(e);
+                    const boardId = boards.find((board) =>
+                        board.contentItems.some((item) => item.id === e.active.id)
+                    )?.id;
+                    setFirstActiveBoardId(boardId || null);
+                }}
                 onDragOver={handleDragOver}
-                onDragEnd={handleDragEnd}
+                onDragEnd={(e) => {
+                    handleDragEnd(e);
+                    setFirstActiveBoardId(null);
+                }}
             >
                 <SortableContext items={boards.map((board) => board.id)}>
                     <div className="flex flex-wrap gap-4">
