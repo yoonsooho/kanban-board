@@ -29,18 +29,14 @@ const useDndHandlers = (
 
         // 보드 이동
         if (helpers.isSomeBoard(activeItemId)) {
-            const oldPosts = items.find((c) => c.id === activeItemId);
-            const newPosts = items.find((c) => c.id === overItemId);
             const oldIndex = items.findIndex((c) => c.id === activeItemId);
             const newIndex = items.findIndex((c) => c.id === overItemId);
-            setItems(arrayMove(items, oldIndex, newIndex));
+            let updatedItems = arrayMove(items, oldIndex, newIndex);
+            setItems(updatedItems);
+            let updatedSeqItems = updatedItems.map((item, index) => ({ ...item, seq: index + 1 }));
 
-            if (oldPosts && newPosts && oldIndex !== newIndex) {
-                const newItems = [
-                    { ...oldPosts, seq: newIndex + 1 },
-                    { ...newPosts, seq: oldIndex + 1 },
-                ];
-                updateSeqPosts(newItems, {
+            if (oldIndex !== newIndex) {
+                updateSeqPosts(updatedSeqItems, {
                     onSuccess: () => {
                         queryClient.invalidateQueries({ queryKey: ["posts", scheduleId] });
                         toast({
