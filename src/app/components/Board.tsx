@@ -104,7 +104,7 @@ export function Board({
                 <button
                     className="p-2 hover:rounded-full hover:bg-gray-200 shrink-0"
                     onClick={() =>
-                        openConfirm(() => handleDeleteBoard?.(Number(id)), {
+                        openConfirm(() => handleDeleteBoard?.(id), {
                             title: "보드 삭제",
                             description: `"${title}" 보드를 정말 삭제하시겠습니까?`,
                             confirmText: "삭제",
