@@ -2,15 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
-    const requestId = Math.random().toString(36).substring(7);
+
     // public 경로는 미들웨어 적용 안함 (/ 페이지는 토큰 체크 필요)
     if (
         pathname.startsWith("/auth") ||
         pathname.startsWith("/auth-loading") ||
         pathname.startsWith("/_next") ||
         pathname.startsWith("/api") ||
-        pathname === "/robots.txt" ||
-        pathname === "/sitemap.xml"
+        pathname === "/robots.txt" || // SEO 크롤링 허용
+        pathname === "/sitemap.xml" // SEO 크롤링 허용
     ) {
         return NextResponse.next();
     }
