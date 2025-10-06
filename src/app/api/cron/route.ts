@@ -5,6 +5,7 @@ export async function GET(req: Request) {
         return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
 
+    // 🔄 Render 서버 ping
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ping`);
         if (!res.ok) throw new Error("Ping failed");
