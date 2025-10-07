@@ -65,7 +65,6 @@ const RoutineList = () => {
 
     const isMutating = isUncompleteMutating || isCompleteMutating || isUpdateMutating || isDeleteMutating;
 
-    console.log("isMutating", isMutating);
     const handleDeleteRoutine = (id: number) => {
         deleteRoutine(id, {
             onSuccess: () => {
