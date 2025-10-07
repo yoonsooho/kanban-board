@@ -11,24 +11,13 @@ jobs:
     call-cron-endpoint:
         runs-on: ubuntu-latest
         steps:
-            - name: Call Vercel cron endpoint
+            - name: Call Vercel cron endpoint and validate
               run: |
                   set -euo pipefail
-                  curl -sS -X GET \
-                    -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-                    https://goaldiary.vercel.app/api/cron \
-                    | jq '.' || true
-            - name: Fail if response indicates error
-              run: |
-                  # Optionally validate response structure
                   RESPONSE=$(curl -sS -X GET \
                     -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
                     https://goaldiary.vercel.app/api/cron)
-                  echo "$RESPONSE"
-                  # Treat HTTP 200 with ok:true as success; otherwise exit 1
-                  if echo "$RESPONSE" | grep -q '"ok": true'; then
-                    echo "Cron call succeeded"
-                  else
-                    echo "Cron call did not return ok:true" >&2
-                    exit 1
-                  fi
+                  echo "$RESPONSE" | jq '.' || true
+                  # Validate strictly with jq
+                  echo "$RESPONSE" | jq -e '.ok == true' >/dev/null
+                  echo "Cron call succeeded"
