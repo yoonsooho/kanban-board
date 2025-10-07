@@ -44,7 +44,7 @@ export default function UpdateRoutineModal({ isOpen, onClose, onSubmit, routine 
             setValue("duration", routine.duration || undefined);
             setValue("isActive", routine.isActive);
         }
-    }, [routine, setValue]);
+    }, [routine, setValue, isOpen]);
 
     const handleFormSubmit = async (data: Partial<Omit<RoutineType, "category"> & { category: string }>) => {
         try {

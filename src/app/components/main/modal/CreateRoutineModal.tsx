@@ -29,7 +29,18 @@ export default function CreateRoutineModal({ isOpen, onClose, onSubmit }: Create
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm<CreateRoutineDto>();
+        getValues,
+    } = useForm<CreateRoutineDto>({
+        defaultValues: {
+            category: [],
+            isActive: true,
+            duration: 0,
+            schedule_date: undefined,
+            time: undefined,
+            title: "",
+            description: "",
+        },
+    });
 
     const handleFormSubmit = async (data: CreateRoutineDto) => {
         try {
@@ -48,7 +59,7 @@ export default function CreateRoutineModal({ isOpen, onClose, onSubmit }: Create
         reset(); // 폼 초기화
         onClose();
     };
-
+    console.log("getValues", getValues());
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
@@ -91,7 +102,8 @@ export default function CreateRoutineModal({ isOpen, onClose, onSubmit }: Create
                             id="category"
                             {...register("category", {
                                 setValueAs: (value) => {
-                                    if (!value) return [];
+                                    console.log("value", value);
+                                    if (!value || value.length === 0) return [];
                                     return value
                                         .split(",")
                                         .map((cat: string) => cat.trim())

@@ -425,6 +425,7 @@ const RoutineList = () => {
                 ))}
             </div>
             <ConfirmModal />
+
             <UpdateRoutineModal
                 isOpen={isUpdateModalOpen}
                 onClose={() => setIsUpdateModalOpen(false)}
