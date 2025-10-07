@@ -11,9 +11,7 @@ export async function POST(req: Request) {
 async function handleCron(req: Request) {
     // Vercel cron은 Authorization 헤더를 보내지 않을 수 있음
     const authHeader = req.headers.get("Authorization");
-    console.log("authHeader", authHeader);
     const cronSecret = process.env.CRON_SECRET;
-    console.log("cronSecret", cronSecret);
 
     // CRON_SECRET이 설정되어 있다면 인증 확인
     if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
@@ -24,7 +22,6 @@ async function handleCron(req: Request) {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ping`);
         if (!res.ok) throw new Error("Ping failed");
-        console.log("✅ Render ping success:", new Date().toISOString());
         return NextResponse.json({ ok: true, timestamp: new Date().toISOString() });
     } catch (err) {
         console.error("❌ Render ping error:", err);

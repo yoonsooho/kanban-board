@@ -33,6 +33,7 @@ export const useGetRoutine = (id: number) => {
 // 새 루틴 생성
 export const useCreateRoutine = () => {
     return useMutation({
+        mutationKey: ["createRoutine"],
         mutationFn: (data: CreateRoutineDto) => {
             return createRoutine(data);
         },
@@ -42,6 +43,7 @@ export const useCreateRoutine = () => {
 // 루틴 수정
 export const useUpdateRoutine = () => {
     return useMutation({
+        mutationKey: ["updateRoutine"],
         mutationFn: ({ id, data }: { id: number; data: Partial<CreateRoutineDto> }) => {
             return updateRoutine(id, data);
         },
@@ -51,6 +53,7 @@ export const useUpdateRoutine = () => {
 // 루틴 삭제
 export const useDeleteRoutine = () => {
     return useMutation({
+        mutationKey: ["deleteRoutine"],
         mutationFn: (id: number) => {
             return deleteRoutine(id);
         },
@@ -69,6 +72,7 @@ export const useGetTodayRoutines = ({ local_date }: { local_date: string }) => {
 // 루틴 완료 처리
 export const useCompleteRoutine = () => {
     return useMutation({
+        mutationKey: ["completeRoutine"],
         mutationFn: ({ id, local_date }: { id: number; local_date: string }) => {
             return completeRoutine(id, local_date);
         },
@@ -78,6 +82,7 @@ export const useCompleteRoutine = () => {
 // 루틴 완료 취소
 export const useUncompleteRoutine = () => {
     return useMutation({
+        mutationKey: ["uncompleteRoutine"],
         mutationFn: ({ id, local_date }: { id: number; local_date: string }) => {
             return uncompleteRoutine(id, local_date);
         },

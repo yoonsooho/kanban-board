@@ -4,7 +4,19 @@ import { PageLoading } from "@/components/ui/loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Clock, Calendar, Play, Edit, Trash2, CheckCircle, RotateCcw, Power, PowerOff, Flame } from "lucide-react";
+import {
+    Clock,
+    Calendar,
+    Play,
+    Edit,
+    Trash2,
+    CheckCircle,
+    RotateCcw,
+    Power,
+    PowerOff,
+    Flame,
+    Loader2,
+} from "lucide-react";
 import { useConfirmModal } from "@/components/ui/confirm-modal";
 import UpdateRoutineModal from "@/app/components/main/modal/UpdateRoutineModal";
 import {
@@ -15,7 +27,7 @@ import {
     useUpdateRoutine,
 } from "@/app/hooks/apiHook/useRoutine";
 import { RoutineType, CreateRoutineDto } from "@/type/RoutineType";
-import { useQueryClient } from "@tanstack/react-query";
+import { useIsMutating, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import dayjs from "dayjs";
 
@@ -34,6 +46,26 @@ const RoutineList = () => {
     const { mutate: uncompleteRoutine } = useUncompleteRoutine();
     const { mutate: updateRoutine } = useUpdateRoutine();
 
+    const isUncompleteMutating =
+        useIsMutating({
+            mutationKey: ["uncompleteRoutine"],
+        }) > 0;
+    const isCompleteMutating =
+        useIsMutating({
+            mutationKey: ["completeRoutine"],
+        }) > 0;
+    const isUpdateMutating =
+        useIsMutating({
+            mutationKey: ["updateRoutine"],
+        }) > 0;
+    const isDeleteMutating =
+        useIsMutating({
+            mutationKey: ["deleteRoutine"],
+        }) > 0;
+
+    const isMutating = isUncompleteMutating || isCompleteMutating || isUpdateMutating || isDeleteMutating;
+
+    console.log("isMutating", isMutating);
     const handleDeleteRoutine = (id: number) => {
         deleteRoutine(id, {
             onSuccess: () => {
@@ -357,10 +389,14 @@ const RoutineList = () => {
                                                 onClick={() =>
                                                     routine.isActive && handleUncompleteRoutine(routine.id, today)
                                                 }
-                                                disabled={!routine.isActive}
+                                                disabled={!routine.isActive || isMutating}
                                             >
                                                 <CheckCircle className="h-4 w-4 mr-2" />
-                                                완료
+                                                {isMutating ? (
+                                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                ) : (
+                                                    "완료"
+                                                )}
                                             </Button>
                                         ) : (
                                             <Button
@@ -373,9 +409,13 @@ const RoutineList = () => {
                                                 onClick={() =>
                                                     routine.isActive && handleCompleteRoutine(routine.id, today)
                                                 }
-                                                disabled={!routine.isActive}
+                                                disabled={!routine.isActive || isMutating}
                                             >
-                                                미완료
+                                                {isMutating ? (
+                                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                ) : (
+                                                    "미완료"
+                                                )}
                                             </Button>
                                         );
                                     })()}
