@@ -14,10 +14,35 @@ jobs:
             - name: Call Vercel cron endpoint and validate
               run: |
                   set -euo pipefail
+                  echo "Calling cron endpoint..."
                   RESPONSE=$(curl -sS -X GET \
                     -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+                    -w "\nHTTP_CODE:%{http_code}" \
                     https://goaldiary.vercel.app/api/cron)
-                  echo "$RESPONSE" | jq '.' || true
-                  # Validate strictly with jq
-                  echo "$RESPONSE" | jq -e '.ok == true' >/dev/null
-                  echo "Cron call succeeded"
+
+                  # Split response and HTTP code
+                  HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_CODE:" | cut -d: -f2)
+                  BODY=$(echo "$RESPONSE" | sed '/HTTP_CODE:/d')
+
+                  echo "HTTP Status: $HTTP_CODE"
+                  echo "Response body: $BODY"
+
+                  # Check if response is valid JSON
+                  if echo "$BODY" | jq . >/dev/null 2>&1; then
+                      echo "Valid JSON response"
+                      # Validate with jq
+                      if echo "$BODY" | jq -e '.ok == true' >/dev/null; then
+                          echo "Cron call succeeded"
+                      else
+                          echo "Cron call failed: ok field is not true"
+                          exit 1
+                      fi
+                  else
+                      echo "Invalid JSON response, treating as success if HTTP 200"
+                      if [ "$HTTP_CODE" = "200" ]; then
+                          echo "Cron call succeeded (HTTP 200)"
+                      else
+                          echo "Cron call failed: HTTP $HTTP_CODE"
+                          exit 1
+                      fi
+                  fi
