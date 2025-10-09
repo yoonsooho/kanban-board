@@ -17,6 +17,7 @@ jobs:
                   echo "Calling cron endpoint..."
                   RESPONSE=$(curl -sS -X GET \
                     -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+                    --max-time 120 \  # 2분 타임아웃
                     -w "\nHTTP_CODE:%{http_code}" \
                     https://goaldiary.vercel.app/api/cron)
 
