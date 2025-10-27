@@ -19,7 +19,6 @@ export type RoutineType = {
     category?: string[];
     created_at?: string;
     updated_at?: string;
-    completedToday?: boolean;
     streak?: number;
     last_completed_date?: string;
 };

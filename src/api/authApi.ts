@@ -33,3 +33,11 @@ export const signOut = async () => {
         credentials: "include",
     });
 };
+
+export const userDelete = async () => {
+    return await commonApiJson("/api/users/me", {
+        method: "DELETE",
+        requireAuth: true, // 회원탈퇴는 인증이 필요
+        credentials: "include",
+    });
+};

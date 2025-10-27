@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { signIn, signUp, getUser, signOut } from "@/api/authApi";
+import { signIn, signUp, getUser, signOut, userDelete } from "@/api/authApi";
 import { useRouter } from "next/navigation";
 import { getAccessTokenFromCookie } from "@/lib/utils";
 
@@ -44,5 +44,11 @@ export const useSignOut = () => {
         onError: (error) => {
             console.log("로그아웃 에러:", error);
         },
+    });
+};
+
+export const useUserDelete = () => {
+    return useMutation({
+        mutationFn: userDelete,
     });
 };

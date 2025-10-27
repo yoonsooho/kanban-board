@@ -59,7 +59,7 @@ export default function CreateRoutineModal({ isOpen, onClose, onSubmit }: Create
         reset(); // 폼 초기화
         onClose();
     };
-    console.log("getValues", getValues());
+
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">

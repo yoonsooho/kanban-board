@@ -256,18 +256,20 @@ const RoutineList = () => {
                                             {routine.description}
                                         </p>
                                     )}
-                                    {routine.streak !== undefined && routine.streak > 0 && (
-                                        <div
-                                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium flex-shrink-0 mb-3 ${
-                                                routine.isActive
-                                                    ? "bg-orange-100 text-orange-700 border border-orange-200"
-                                                    : "bg-gray-100 text-gray-500 border border-gray-200"
-                                            }`}
-                                        >
-                                            <Flame className="h-3.5 w-3.5" />
-                                            <span>{routine.streak}일</span>
-                                        </div>
-                                    )}
+                                    {routine.streak !== undefined &&
+                                        routine.streak > 0 &&
+                                        routine.last_completed_date === dayjs().format("YYYY-MM-DD") && (
+                                            <div
+                                                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium flex-shrink-0 mb-3 ${
+                                                    routine.isActive
+                                                        ? "bg-orange-100 text-orange-700 border border-orange-200"
+                                                        : "bg-gray-100 text-gray-500 border border-gray-200"
+                                                }`}
+                                            >
+                                                <Flame className="h-3.5 w-3.5" />
+                                                <span>{routine.streak}일</span>
+                                            </div>
+                                        )}
                                     <div className="flex items-center gap-2 flex-wrap">
                                         {routine.category && routine.category.length > 0 && (
                                             <>

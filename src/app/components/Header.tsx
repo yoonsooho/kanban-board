@@ -1,14 +1,27 @@
 "use client";
 
-import { useGetUser, useSignOut } from "@/app/hooks/apiHook/useAuth";
+import { useGetUser, useSignOut, useUserDelete } from "@/app/hooks/apiHook/useAuth";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
     const [mounted, setMounted] = useState(false);
+    const router = useRouter();
     const { data: user, isLoading, error } = useGetUser();
     const signOutMutation = useSignOut();
+    const userDeleteMutation = useUserDelete();
+    const handleUserDelete = () => {
+        userDeleteMutation.mutate(undefined, {
+            onSuccess: () => {
+                router.push("/");
+            },
+            onError: (error) => {
+                console.log("회원탈퇴 에러:", error);
+            },
+        });
+    };
 
     useEffect(() => {
         setMounted(true);
@@ -103,6 +116,14 @@ export default function Header() {
 
                         <Button onClick={handleLogout} variant="outline" size="sm" disabled={signOutMutation.isPending}>
                             로그아웃
+                        </Button>
+                        <Button
+                            onClick={handleUserDelete}
+                            variant="outline"
+                            size="sm"
+                            disabled={userDeleteMutation.isPending}
+                        >
+                            회원탈퇴
                         </Button>
                     </div>
                 </div>
