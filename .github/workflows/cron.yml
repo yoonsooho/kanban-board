@@ -17,7 +17,7 @@ jobs:
                   echo "Calling cron endpoint..."
                   RESPONSE=$(curl -sS -X GET \
                     -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-                    --max-time 120 \
+                    --max-time 300 \
                     -w "\nHTTP_CODE:%{http_code}" \
                     https://goaldiary.vercel.app/api/cron)
 
@@ -28,7 +28,7 @@ jobs:
                   echo "HTTP Status: $HTTP_CODE"
                   echo "Response body: $BODY"
 
-                  # Check if response is valid JSON
+                  # Check if response is valid JSON대
                   if echo "$BODY" | jq . >/dev/null 2>&1; then
                       echo "Valid JSON response"
                       # Validate with jq
