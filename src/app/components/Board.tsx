@@ -74,7 +74,7 @@ export function Board({
             <ConfirmModal />
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
-                    <button {...attributes} {...listeners} className="cursor-move shrink-0">
+                    <button {...attributes} {...listeners} className="cursor-move shrink-0" suppressHydrationWarning>
                         <Image src={moveIcon} alt="moveIcon" width={20} height={20} />
                     </button>
                     <button

@@ -53,7 +53,7 @@ export function SortableItem({ id, name, isDragOverlay, handleDeleteItem, handle
         >
             <div className="flex items-center gap-2 justify-between">
                 <div className="flex items-center gap-2">
-                    <span {...attributes} {...listeners} className="cursor-move">
+                    <span {...attributes} {...listeners} className="cursor-move" suppressHydrationWarning>
                         <Image src={moveIcon} alt="moveIcon" width={20} height={20} />
                     </span>
                     <button

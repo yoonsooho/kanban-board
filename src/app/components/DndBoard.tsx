@@ -16,7 +16,7 @@ import {
     useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import { Board } from "./Board";
 import { useGetPosts } from "@/app/hooks/apiHook/usePost";
@@ -27,8 +27,8 @@ import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 export default function DndBoard({ scheduleId }: { scheduleId: number }) {
     const { data: boardsData } = useGetPosts(scheduleId);
-    const [boards, setBoards] = useState<boards>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    // 하이드레이션된 데이터를 초기값으로 사용 (첫 렌더링부터 데이터가 있도록)
+    const [boards, setBoards] = useState<boards>(() => boardsData || []);
 
     const [activeId, setActiveId] = useState<number | null>(null); //items와 activeId둘다 변경될때 실행 따라서 두개의 아이디를 공용해서 사용하는 state
     const [newBoard, setNewBoard] = useState("");
@@ -59,17 +59,19 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
         filters: { status: "pending", mutationKey: ["contentItems"] },
     });
 
+    // React Query 데이터가 업데이트되면 동기화
     useLayoutEffect(() => {
-        if (boardsData) setBoards(boardsData);
-        setIsLoading(false);
+        if (boardsData) {
+            setBoards(boardsData);
+        }
     }, [boardsData]);
 
-    if (isLoading) return <PageLoading text="일정을 로딩중입니다..." />;
+    // if (isLoading) return <PageLoading text="일정을 로딩중입니다..." />;
 
     const isMutating = postsPending.length > 0 || contentItemsPending.length > 0;
 
     return (
-        <div className="p-8">
+        <div className="p-8" suppressHydrationWarning>
             <LoadingOverlay open={isMutating} text="업데이트 중입니다..." />
             <DndContext
                 sensors={sensors}
