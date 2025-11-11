@@ -66,8 +66,6 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
         }
     }, [boardsData]);
 
-    // if (isLoading) return <PageLoading text="일정을 로딩중입니다..." />;
-
     const isMutating = postsPending.length > 0 || contentItemsPending.length > 0;
 
     return (

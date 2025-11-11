@@ -81,7 +81,7 @@ export function SortableItem({ id, name, isDragOverlay, handleDeleteItem, handle
                                 className="text-lg font-bold w-[200px]"
                             />
                         ) : (
-                            <h2 className="text-lg font-bold w-[200px]">{name}</h2>
+                            <h2 className="text-lg font-bold w-[200px] break-words">{name}</h2>
                         )}
                     </form>
                 </div>
