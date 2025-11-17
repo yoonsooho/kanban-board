@@ -47,17 +47,6 @@ export const metadata: Metadata = {
         description: "개인의 목표, 명언, 일기와 팀 협업을 하나로 통합한 혁신적인 플랫폼",
         images: ["/og-image.jpg"],
     },
-    robots: {
-        index: true,
-        follow: true,
-        googleBot: {
-            index: true,
-            follow: true,
-            "max-video-preview": -1,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
     verification: {
         google: "JxjjD7DM8P_qMCHuPj4jjk7qqIk8iGFA2td5hWndwh8",
     },
