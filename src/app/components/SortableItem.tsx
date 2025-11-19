@@ -17,8 +17,9 @@ interface SortableItemProps {
 export function SortableItem({ id, name, isDragOverlay, handleDeleteItem, handleEditItem }: SortableItemProps) {
     const [isEditMode, setIsEditMode] = useState(false);
     const [editValue, setEditValue] = useState(name);
-    const editRef = useRef<HTMLInputElement>(null);
+    const editRef = useRef<HTMLTextAreaElement>(null);
     const handleSubmit = () => {
+        if (editValue.trim() === "") return;
         if (editValue.trim() && editValue !== name) {
             handleEditItem?.(id, editValue);
         }
@@ -73,15 +74,22 @@ export function SortableItem({ id, name, isDragOverlay, handleDeleteItem, handle
                         }}
                     >
                         {isEditMode ? (
-                            <input
+                            <textarea
                                 ref={editRef}
-                                type="text"
                                 value={editValue}
                                 onChange={(e) => setEditValue(e.target.value)}
-                                className="text-lg font-bold w-[200px]"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleSubmit();
+                                    }
+                                }}
+                                className="text-lg font-bold w-[200px] resize-none"
+                                cols={10}
+                                rows={3}
                             />
                         ) : (
-                            <h2 className="text-lg font-bold w-[200px] break-words">{name}</h2>
+                            <h2 className="text-lg font-bold w-[200px] break-words whitespace-pre-wrap">{name}</h2>
                         )}
                     </form>
                 </div>

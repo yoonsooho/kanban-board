@@ -1,4 +1,4 @@
-import { useDeleteContentItems, usePostContentItems } from "@/app/hooks/apiHook/useContentItem";
+import { useDeleteContentItems, usePostContentItems, usePatchContentItems } from "@/app/hooks/apiHook/useContentItem";
 import { boards } from "@/type/boards";
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -6,6 +6,7 @@ import { toast } from "@/hooks/use-toast";
 
 const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) => {
     const { mutate: postContentItems } = usePostContentItems();
+    const { mutate: patchContentItems } = usePatchContentItems();
     const { mutate: deleteContentItems } = useDeleteContentItems();
     const queryClient = useQueryClient();
     // 새 아이템 추가
@@ -35,13 +36,18 @@ const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) 
 
     // 아이템 이름 수정
     const handleEditItem = (itemId: number, newName: string) => {
-        setItems((prev) =>
-            prev.map((board) => ({
-                ...board,
-                contentItems: board.contentItems.map((item) =>
-                    item.id === itemId ? { ...item, text: newName } : item
-                ),
-            }))
+        if (newName.trim() === "") return;
+        patchContentItems(
+            { contentItemId: itemId, data: { text: newName } },
+            {
+                onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ["posts"] });
+                    toast({
+                        title: "아이템 이름 수정 완료",
+                        description: "아이템 이름 수정 완료",
+                    });
+                },
+            }
         );
     };
 

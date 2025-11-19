@@ -8,6 +8,9 @@ export type postContentItemsType = {
     text: string;
     post_id: number;
 };
+export type patchContentItemsType = {
+    text: string;
+};
 
 export type moveContentItems = {
     contentItemId: number;

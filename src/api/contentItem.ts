@@ -1,5 +1,5 @@
 import { commonApi, commonApiJson } from "@/api/commonApi";
-import { postContentItemsType, moveContentItems } from "@/type/contentItems";
+import { postContentItemsType, moveContentItems, patchContentItemsType } from "@/type/contentItems";
 
 export const getContentItems = async (postId: number) => {
     return await commonApiJson(`/api/content-items?postId=${postId}`, {
@@ -13,6 +13,14 @@ export const postContentItems = async (data: postContentItemsType) => {
         method: "POST",
         body: data,
         requireAuth: true, // 일정 생성은 인증이 필요
+    });
+};
+
+export const patchContentItems = async (contentItemId: number, data: patchContentItemsType) => {
+    return await commonApiJson(`/api/content-items/${contentItemId}`, {
+        method: "PATCH",
+        body: data,
+        requireAuth: true, // 일정 수정은 인증이 필요
     });
 };
 
