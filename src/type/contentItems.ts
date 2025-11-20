@@ -10,6 +10,8 @@ export type postContentItemsType = {
 };
 export type patchContentItemsType = {
     text: string;
+    startTime?: string;
+    endTime?: string;
 };
 
 export type moveContentItems = {

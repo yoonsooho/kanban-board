@@ -3,6 +3,7 @@ import { boards } from "@/type/boards";
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { toast } from "@/hooks/use-toast";
+import { patchContentItemsType } from "@/type/contentItems";
 
 const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) => {
     const { mutate: postContentItems } = usePostContentItems();
@@ -35,10 +36,11 @@ const useItemHandler = (setItems: React.Dispatch<React.SetStateAction<boards>>) 
     };
 
     // 아이템 이름 수정
-    const handleEditItem = (itemId: number, newName: string) => {
-        if (newName.trim() === "") return;
+    const handleEditItem = (itemId: number, { text, startTime, endTime }: patchContentItemsType) => {
+        if (!text) return;
+        let data: patchContentItemsType = { text, startTime, endTime };
         patchContentItems(
-            { contentItemId: itemId, data: { text: newName } },
+            { contentItemId: itemId, data },
             {
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: ["posts"] });

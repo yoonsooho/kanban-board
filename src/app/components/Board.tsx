@@ -5,18 +5,19 @@ import deleteIcon from "@/assets/deleteIcon.png";
 import editIcon from "@/assets/editIcon.png";
 import moveIcon from "@/assets/moveIcon.png";
 import { useConfirmModal } from "@/components/ui/confirm-modal";
+import { patchContentItemsType } from "@/type/contentItems";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Image from "next/image";
 import React, { useState } from "react";
 interface BoardProps {
     id: number;
-    items: { id: number; text: string }[];
+    items: { id: number; text: string; startTime: string | null; endTime: string | null }[];
     title: string;
     isDragOverlay?: boolean;
     handleEditBoard?: (boardId: number, newName: string) => void;
     handleDeleteBoard?: (boardId: number) => void;
-    handleEditItem?: (itemId: number, newName: string) => void;
+    handleEditItem?: (itemId: number, data: patchContentItemsType) => void;
     handleDeleteItem?: (itemId: number) => void;
     handleAddItem?: (boardId: number, itemName: string) => void;
 }
@@ -66,7 +67,7 @@ export function Board({
         <div
             ref={setNodeRef}
             style={style}
-            className={`w-96 p-4 bg-gray-100 rounded-lg min-h-[200px] relative
+            className={`w-1/3 p-4 bg-gray-100 rounded-lg min-h-[200px] relative
                 ${isDragging ? "opacity-50" : ""}
                 ${isDragOverlay ? "shadow-lg" : ""}
             `}
@@ -123,6 +124,8 @@ export function Board({
                             key={item.id}
                             id={Number(item.id)}
                             name={item.text}
+                            startTime={item.startTime || null}
+                            endTime={item.endTime || null}
                             handleDeleteItem={handleDeleteItem}
                             handleEditItem={handleEditItem}
                         />

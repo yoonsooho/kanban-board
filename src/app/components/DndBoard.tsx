@@ -24,14 +24,15 @@ import { PageLoading } from "@/components/ui/loading";
 
 import { useMutationState } from "@tanstack/react-query";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
+import BigCalendar, { CalendarEvent } from "@/components/calendar/BigCalendar";
+import dayjs from "dayjs";
 
 export default function DndBoard({ scheduleId }: { scheduleId: number }) {
     const { data: boardsData } = useGetPosts(scheduleId);
     // 하이드레이션된 데이터를 초기값으로 사용 (첫 렌더링부터 데이터가 있도록)
     const [boards, setBoards] = useState<boards>(() => boardsData || []);
-
     const [activeId, setActiveId] = useState<number | null>(null); //items와 activeId둘다 변경될때 실행 따라서 두개의 아이디를 공용해서 사용하는 state
-    const [newBoard, setNewBoard] = useState("");
+
     const [firstActiveBoardId, setFirstActiveBoardId] = useState<number | null>(null);
     const helper = helpers(boards);
     const { handleDragStart, handleDragEnd, handleDragOver } = useDndHandlers(
@@ -69,7 +70,7 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
     const isMutating = postsPending.length > 0 || contentItemsPending.length > 0;
 
     return (
-        <div className="p-8" suppressHydrationWarning>
+        <div className="p-8 box-border" suppressHydrationWarning>
             <LoadingOverlay open={isMutating} text="업데이트 중입니다..." />
             <DndContext
                 sensors={sensors}
@@ -102,7 +103,7 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
                                 handleAddItem={handleAddItem}
                             />
                         ))}
-                        <div className="w-96 p-4 bg-gray-100 rounded-lg min-h-[200px] relative flex flex-col">
+                        {/* <div className="w-96 p-4 bg-gray-100 rounded-lg min-h-[200px] relative flex flex-col">
                             <h2 className="mb-6 text-lg font-bold text-gray-700">Add board</h2>
                             <form
                                 onSubmit={(e) => {
@@ -128,10 +129,48 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
                                     Add board
                                 </button>
                             </form>
-                        </div>
+                        </div> */}
                     </div>
                 </SortableContext>
-
+                <div className="w-full h-full mt-2">
+                    <BigCalendar
+                        events={boards.flatMap((board) =>
+                            board.contentItems.reduce<CalendarEvent[]>(
+                                (
+                                    acc: CalendarEvent[],
+                                    cur: {
+                                        id: number;
+                                        text: string;
+                                        startTime: string | null;
+                                        endTime: string | null;
+                                    }
+                                ) => {
+                                    if (cur?.startTime && cur?.endTime) {
+                                        let startTime = new Date(
+                                            dayjs(`${dayjs().format("YYYY-MM-DD")} ${cur.startTime}`).format(
+                                                "YYYY-MM-DD HH:mm"
+                                            )
+                                        );
+                                        let endTime = new Date(
+                                            dayjs(`${dayjs().format("YYYY-MM-DD")} ${cur.endTime}`).format(
+                                                "YYYY-MM-DD HH:mm"
+                                            )
+                                        );
+                                        acc.push({
+                                            id: cur.id,
+                                            title: cur.text,
+                                            startTime: startTime,
+                                            endTime: endTime,
+                                        });
+                                    }
+                                    return acc;
+                                },
+                                []
+                            )
+                        )}
+                        defaultDate={new Date()}
+                    />
+                </div>
                 {/* dnd 오버레이(dnd 애니메이션 효과) */}
                 <DragOverlay>
                     {activeId &&
