@@ -72,7 +72,6 @@ export default function BigCalendar({
         }),
         []
     );
-    console.log("events", events);
 
     // 이벤트 ID 기반으로 일관된 랜덤 색상 생성
     const getEventColor = (eventId: string | number | undefined) => {
@@ -123,8 +122,8 @@ export default function BigCalendar({
             return eventStart.isBefore(earliest) ? eventStart : earliest;
         }, moment(events[0]?.startTime));
 
-        // 가장 이른 시간의 시작 시간으로 설정 (예: 09:00 -> 09:00)
-        return earliestStart.toDate();
+        // 가장 이른 시간의 시작 시간으로 설정 (예: 09:30 -> 09:00, 분을 00분으로 고정)
+        return earliestStart.startOf("hour").toDate();
     }, [events, min]);
 
     return (
