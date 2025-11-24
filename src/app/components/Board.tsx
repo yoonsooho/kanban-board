@@ -67,7 +67,7 @@ export function Board({
         <div
             ref={setNodeRef}
             style={style}
-            className={`w-1/3 p-4 bg-gray-100 rounded-lg min-h-[200px] relative
+            className={`w-full p-4 bg-gray-100 rounded-lg relative h-full
                 ${isDragging ? "opacity-50" : ""}
                 ${isDragOverlay ? "shadow-lg" : ""}
             `}
@@ -114,7 +114,7 @@ export function Board({
                         })
                     }
                 >
-                    <Image src={deleteIcon} alt="deleteIcon" width={20} height={20} />
+                    {/* <Image src={deleteIcon} alt="deleteIcon" width={20} height={20} /> */}
                 </button>
             </div>
             <div className="h-96 overflow-y-auto">

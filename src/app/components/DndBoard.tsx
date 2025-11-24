@@ -70,7 +70,7 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
     const isMutating = postsPending.length > 0 || contentItemsPending.length > 0;
 
     return (
-        <div className="p-8 box-border" suppressHydrationWarning>
+        <div className="p-8 box-border flex flex-row gap-4" suppressHydrationWarning>
             <LoadingOverlay open={isMutating} text="업데이트 중입니다..." />
             <DndContext
                 sensors={sensors}
@@ -89,7 +89,7 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
                 }}
             >
                 <SortableContext items={boards.map((board) => board.id)}>
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-col gap-4 flex-[0.4]">
                         {boards?.map((board) => (
                             <Board
                                 key={board.id}
@@ -132,7 +132,7 @@ export default function DndBoard({ scheduleId }: { scheduleId: number }) {
                         </div> */}
                     </div>
                 </SortableContext>
-                <div className="w-full h-full mt-2">
+                <div className="h-full mt-2 flex-[0.6]">
                     <BigCalendar
                         events={boards.flatMap((board) =>
                             board.contentItems.reduce<CalendarEvent[]>(
