@@ -98,10 +98,13 @@ export default function BigCalendar({
     // 이벤트 스타일 생성 함수
     const eventPropGetter = (event: CalendarEvent) => {
         const backgroundColor = getEventColor(event.id);
-        const hoverColor = backgroundColor.replace(/\d+/g, (match) => {
-            const num = parseInt(match);
-            return Math.max(0, num - 20).toString(); // hover 시 더 진한 색상
-        });
+
+        // 이벤트의 시간 간격 계산 (밀리초 단위)
+        const durationInMs = event.endTime.getTime() - event.startTime.getTime();
+        const durationInHours = durationInMs / (1000 * 60 * 60);
+
+        // 1시간 이상이면 'rbc-event-long-duration' className 추가
+        const className = durationInHours >= 1 ? "rbc-event-long-duration" : "";
 
         return {
             style: {
@@ -109,6 +112,7 @@ export default function BigCalendar({
                 borderColor: backgroundColor,
                 color: "white",
             },
+            className,
         };
     };
 
@@ -181,17 +185,16 @@ export default function BigCalendar({
                         transition: all 0.2s !important;
                     }
                     .rbc-event-label {
+                        font-weight: 500 !important;
+                        color: white !important;
+                    }
+
+                    /* 1시간 이상인 이벤트의 폰트 크기 증가 */
+                    .rbc-event-long-duration .rbc-event-label {
                         font-size: 1.1rem !important;
-                        font-weight: 500 !important;
-                        color: white !important;
                     }
-                    .rbc-event-label:hover {
-                        font-size: 0.75rem !important;
-                        font-weight: 500 !important;
-                        color: white !important;
-                    }
-                    .rbc-event-content {
-                        padding: 0.25rem 0.5rem !important;
+
+                    .rbc-event-long-duration .rbc-event-content {
                         font-size: 1.1rem !important;
                     }
                 `}
