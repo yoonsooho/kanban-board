@@ -29,53 +29,13 @@ export default function Header() {
         return firstPath === firstCheckPath;
     };
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!mounted) {
-        return (
-            <header className="bg-white shadow-sm border-b border-gray-200">
-                <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
-                        <div className="flex-shrink-0">
-                            <Link href="/main">
-                                <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
-                            </Link>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                            <div className="animate-pulse bg-gray-200 h-8 w-20 rounded"></div>
-                            <div className="animate-pulse bg-gray-200 h-8 w-16 rounded"></div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-        );
-    }
-
     const handleLogout = () => {
         signOutMutation.mutate();
     };
 
-    if (isLoading) {
-        return (
-            <header className="bg-white shadow-sm border-b border-gray-200">
-                <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
-                        <div className="flex-shrink-0">
-                            <Link href="/main">
-                                <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
-                            </Link>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                            <div className="animate-pulse bg-gray-200 h-8 w-20 rounded"></div>
-                            <div className="animate-pulse bg-gray-200 h-8 w-16 rounded"></div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-        );
-    }
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     if (error) {
         return (
@@ -130,29 +90,34 @@ export default function Header() {
                             </Link>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-4">
-                        {user && (
+                    {mounted && !isLoading && user && user.username && (
+                        <div className="flex items-center space-x-4">
                             <div className="flex items-center space-x-3">
                                 <div className="flex flex-col text-right">
                                     <span className="text-sm font-medium text-gray-900">
-                                        안녕하세요, {user.username} 님!
+                                        안녕하세요, {user?.username} 님!
                                     </span>
                                 </div>
                             </div>
-                        )}
 
-                        <Button onClick={handleLogout} variant="outline" size="sm" disabled={signOutMutation.isPending}>
-                            로그아웃
-                        </Button>
-                        <Button
-                            onClick={handleUserDelete}
-                            variant="outline"
-                            size="sm"
-                            disabled={userDeleteMutation.isPending}
-                        >
-                            회원탈퇴
-                        </Button>
-                    </div>
+                            <Button
+                                onClick={handleLogout}
+                                variant="outline"
+                                size="sm"
+                                disabled={signOutMutation.isPending}
+                            >
+                                로그아웃
+                            </Button>
+                            <Button
+                                onClick={handleUserDelete}
+                                variant="outline"
+                                size="sm"
+                                disabled={userDeleteMutation.isPending}
+                            >
+                                회원탈퇴
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </div>
         </header>
