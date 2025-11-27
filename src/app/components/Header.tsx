@@ -4,11 +4,12 @@ import { useGetUser, useSignOut, useUserDelete } from "@/app/hooks/apiHook/useAu
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function Header() {
     const [mounted, setMounted] = useState(false);
     const router = useRouter();
+    const pathname = usePathname();
     const { data: user, isLoading, error } = useGetUser();
     const signOutMutation = useSignOut();
     const userDeleteMutation = useUserDelete();
@@ -21,6 +22,11 @@ export default function Header() {
                 console.log("회원탈퇴 에러:", error);
             },
         });
+    };
+    const checkPathname = (checkPath: string) => {
+        let firstPath = pathname.split("/")[1];
+        let firstCheckPath = checkPath.split("/")[1];
+        return firstPath === firstCheckPath;
     };
 
     useEffect(() => {
@@ -97,12 +103,33 @@ export default function Header() {
         <header className="bg-white shadow-sm border-b border-gray-200">
             <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
-                    <div className="flex-shrink-0">
+                    <div className="flex items-center space-x-24">
                         <Link href="/main">
                             <h1 className="text-xl font-semibold text-gray-900">Goal Diary</h1>
                         </Link>
+                        <div className="flex items-center space-x-1 bg-muted p-1 rounded-md">
+                            <Link
+                                href="/main"
+                                className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 ${
+                                    checkPathname("/main")
+                                        ? "bg-background text-foreground shadow-sm"
+                                        : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
+                                }`}
+                            >
+                                메인
+                            </Link>
+                            <Link
+                                href="/diary"
+                                className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 ${
+                                    checkPathname("/diary")
+                                        ? "bg-background text-foreground shadow-sm"
+                                        : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
+                                }`}
+                            >
+                                일기
+                            </Link>
+                        </div>
                     </div>
-
                     <div className="flex items-center space-x-4">
                         {user && (
                             <div className="flex items-center space-x-3">
